@@ -54,8 +54,8 @@
     ]
   },
   "logo": {
-    "light": "/images/flexor_Logo_White_HORIZONTAL(1).svg",
-    "dark": "/images/flexor_Logo_Black_HORIZONTAL(1).svg"
+    "light": "/images/flexor_Logo_Black_HORIZONTAL(1).svg",
+    "dark": "/images/flexor_Logo_White_HORIZONTAL(1).svg"
   },
   "navbar": {
     "links": [
