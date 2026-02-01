@@ -1,4 +1,139 @@
 ---
-title: 'FLEX'
+title: "FLEX"
 ---
 
+# Use FLEX with Databricks
+
+This page describes how to use the `FLEX` function in Databricks.
+
+## Examples
+
+<Info>
+  MESSAGE_ID - For Conversational data (e.g., Chats, Transcripts, Emails)
+
+  ENTRY_ID - For Non-Conversational data (e.g, CRM Notes, Reviews)
+
+  ELEMENT_ID - For Documents
+</Info>
+
+### Classification
+
+```sql
+%sql
+WITH subset AS
+(
+    SELECT *
+    FROM my_catalog.my_schema.conversations
+    LIMIT 1000
+),
+flex_query AS
+(
+    SELECT result.*
+    FROM subset
+    CROSS JOIN LATERAL FLEX(message_id, 'Did the customer request a refund?') AS result
+)
+SELECT flex_query.*
+FROM subset
+JOIN flex_query
+    ON flex_query.message_id = subset.message_id
+WHERE answer = 'True';
+```
+
+### Extraction
+
+```sql
+%sql
+WITH subset AS
+(
+    SELECT *
+    FROM my_catalog.my_schema.conversations
+    LIMIT 1000
+),
+flex_query AS
+(
+    SELECT result.*
+    FROM subset
+    CROSS JOIN LATERAL FLEX(message_id, 'Did the customer mention a product issue? -> product') AS result
+)
+SELECT flex_query.*
+FROM subset
+JOIN flex_query
+    ON flex_query.message_id = subset.message_id
+WHERE answer NOT LIKE 'NA';
+```
+
+### Coupled-extraction
+
+```sql
+%sql
+WITH subset AS
+(
+    SELECT *
+    FROM my_catalog.my_schema.conversations
+    LIMIT 1000
+),
+flex_query AS
+(
+    SELECT result.*
+    FROM subset
+    CROSS JOIN LATERAL FLEX(message_id, 
+        'Did the customer complain? -> product AS product, issue AS issue') AS result
+)
+SELECT flex_query.*
+FROM subset
+JOIN flex_query
+    ON flex_query.message_id = subset.message_id
+WHERE answer NOT LIKE 'NA';
+```
+
+### Categories
+
+```sql
+%sql
+WITH subset AS
+(
+    SELECT *
+    FROM my_catalog.my_schema.conversations
+    LIMIT 1000
+),
+flex_query AS
+(
+    SELECT result.*
+    FROM subset
+    CROSS JOIN LATERAL FLEX(message_id, 
+        'Did the customer report an issue? -> issue type -> [Billing, Technical, Shipping, Account]') AS result
+)
+SELECT flex_query.*
+FROM subset
+JOIN flex_query
+    ON flex_query.message_id = subset.message_id
+WHERE answer NOT LIKE 'NA';
+```
+
+## Aggregate Extraction and Category Results
+
+Use `LATERAL VIEW OUTER EXPLODE` to aggregate extraction or category results:
+
+```sql
+%sql
+WITH subset AS
+(
+    SELECT *
+    FROM my_catalog.my_schema.conversations
+    LIMIT 1000
+),
+flex_query AS
+(
+    SELECT result.*
+    FROM subset
+    CROSS JOIN LATERAL FLEX(message_id, '<user_input>') AS result
+)
+SELECT
+    unnested_answer AS extracted_value,
+    COUNT(*) AS count
+FROM flex_query
+LATERAL VIEW OUTER EXPLODE(from_json(answer, 'array<string>')) exploded_data AS unnested_answer
+WHERE unnested_answer NOT LIKE 'NA'
+GROUP BY unnested_answer
+ORDER BY count DESC;
+```

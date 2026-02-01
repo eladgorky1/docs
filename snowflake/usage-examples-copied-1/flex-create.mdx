@@ -1,4 +1,108 @@
 ---
-title: 'FLEX_CREATE'
+title: "FLEX_CREATE"
 ---
 
+# Use FLEX_CREATE with Databricks
+
+This page describes how to use the `FLEX_CREATE` function in Databricks.
+
+## Examples
+
+### Classification
+
+```sql
+%sql
+SELECT * FROM FLEX_CREATE(
+    'Did the customer request a refund?',
+    'refund_request',
+    'conversations'
+);
+```
+
+Query results:
+
+```sql
+%sql
+SELECT flexor_id, refund_request, refund_request_evidence
+FROM my_catalog.my_schema.conversations
+WHERE refund_request = TRUE;
+```
+
+### Extraction
+
+```sql
+%sql
+SELECT * FROM FLEX_CREATE(
+    'Did the customer mention a product issue? -> product',
+    'issue_product',
+    'conversations'
+);
+```
+
+Query results:
+
+```sql
+%sql
+SELECT unnested_value AS product
+FROM my_catalog.my_schema.conversations
+LATERAL VIEW OUTER EXPLODE(issue_product) exploded_table AS unnested_value
+WHERE SIZE(issue_product) > 0
+    AND unnested_value != 'NA';
+```
+
+### Coupled-extraction
+
+```sql
+%sql
+SELECT * FROM FLEX_CREATE(
+    'Did the customer complain? -> product AS product, issue AS issue',
+    'product_issues',
+    'conversations'
+);
+```
+
+Query results:
+
+```sql
+%sql
+SELECT
+    unnested_value.product AS product,
+    unnested_value.issue AS issue
+FROM my_catalog.my_schema.conversations
+LATERAL VIEW OUTER EXPLODE(product_issues) exploded_table AS unnested_value
+WHERE SIZE(product_issues) > 0
+    AND unnested_value != 'NA';
+```
+
+### Categories
+
+```sql
+%sql
+SELECT * FROM FLEX_CREATE(
+    'Did the customer report an issue? -> issue type -> [Billing, Technical, Shipping, Account]',
+    'issue_category',
+    'conversations'
+);
+```
+
+Query results:
+
+```sql
+%sql
+SELECT unnested_value AS category
+FROM my_catalog.my_schema.conversations
+LATERAL VIEW OUTER EXPLODE(issue_category) exploded_table AS unnested_value
+WHERE SIZE(issue_category) > 0
+    AND unnested_value != 'NA';
+```
+
+## Unnested View
+
+Flexor provides an unnested view for Extraction and Category columns, where each value is displayed in a separate row.
+
+```sql
+%sql
+SELECT *
+FROM my_catalog.my_schema.<table_name>_unnested
+WHERE column_name LIKE '<column_name>';
+```

@@ -88,20 +88,4 @@ WHERE ARRAY_SIZE(issue_category) > 0
     AND flatten_col.value != 'NA';
 ```
 
-## Aggregate Extraction and Category Results
-
-Count occurrences of each value:
-
-```sql
-SELECT
-    flatten_col.value AS value,
-    COUNT(*) AS count
-FROM <table_name>,
-    TABLE(FLATTEN(INPUT => <column_name>)) AS flatten_col
-WHERE ARRAY_SIZE(<column_name>) > 0
-    AND flatten_col.value != 'NA'
-GROUP BY value
-ORDER BY count DESC;
-```
-
 ## 
