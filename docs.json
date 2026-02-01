@@ -8,8 +8,8 @@
     "dark": "#7C31DD"
   },
   "favicon": {
-    "light": "/images/flexor_Logo_Black_HORIZONTAL(1).svg",
-    "dark": "/images/flexor_Logo_White_HORIZONTAL(1).svg"
+    "light": "/images/flexor_Icon_Only_Black.svg",
+    "dark": "/images/flexor_Icon_Only_White.svg"
   },
   "navigation": {
     "global": {
