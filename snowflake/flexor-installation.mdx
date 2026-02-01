@@ -1,0 +1,211 @@
+---
+title: "Flexor Installation"
+---
+
+## Installation Prerequisites
+
+- A user with _ACCOUNTADMIN_ (a.k.a Account Administrator) permissions.
+- A database containing the data to be shared with Flexor.
+- Providing Flexor with the Snowflake region you wish to install in.
+
+## Part 1: Create the Integration and Share Data with Flexor
+
+### What will be done in your environment
+
+- A data share will be created
+- The data will be shared with Flexor's account
+- A new integration for Flexor functions (`FLEX`, `FLEX_CREATE`, `FLEX_CATEGORY_SUGGEST`, `FLEX_ARCHIVE`) will be created
+
+### Step-by-Step Guide
+
+#### 1. Get account information
+
+Run the below query from your Snowflake environment and send the results to Flexor:
+
+```sql
+SELECT CURRENT_ORGANIZATION_NAME() AS ORG_NAME,
+       CURRENT_ACCOUNT() AS ACCOUNT_ID,
+       CURRENT_REGION() AS REGION
+```
+
+#### 2. Create the API integration
+
+Run the below query from your Snowflake environment and send the results to Flexor:
+
+```sql
+CREATE OR REPLACE API INTEGRATION flexor_integration
+  api_provider = google_api_gateway
+  api_allowed_prefixes = ('https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev')
+  google_audience = 'flexor-sql-handler-production-api-13k4qyxe5ams4.apigateway.flexor-364115.cloud.goog'
+  enabled = true;
+
+describe integration flexor_integration;
+```
+
+#### 3. Share the data with Flexor
+
+[Data Ingestion & Sharing](https://flexor.mintlify.app/guides/data-ingestion-and-sharing) documentation
+
+## Part 2: Finalizing Integration
+
+### What will be done in your environment
+
+- Create two new databases from shares by Flexor - Training environment, and Customer environment
+- Creation of Flexor functions (, `FLEX_CREATE`, `FLEX_CATEGORY_SUGGEST`, `FLEX_ARCHIVE`)
+- Creation of a Warehouse (XS) to run Flexor with
+- Creation of Role(s) that can use the entire set of Flexor capabilities
+- Validating the entire integration works end to end
+
+### Step-by-Step Guide
+
+#### 1. Full installation script
+
+Replace the following in the script:
+
+- `<flexor_account>` with **Flexor Account ID** - provided by Flexor
+- `<customer_name>` with **Customer Name** - provided by Flexor
+- `<Flexor_user_role_name>` with the role you wish to give privileges to use Flexor
+
+Run the following script with `account_admin` privileges:
+
+```sql
+-- Creates the role to be used by users
+CREATE ROLE IF NOT EXISTS <Flexor_user_role_name>;
+
+-- Creates warehouse
+CREATE WAREHOUSE FLEXOR_WH
+  WITH WAREHOUSE_SIZE = 'XSMALL'
+  AUTO_SUSPEND = 300
+  AUTO_RESUME = true;
+
+GRANT USAGE ON WAREHOUSE FLEXOR_WH TO ROLE <Flexor_user_role_name>;
+
+-- Creates database, schemas for installed sql functions
+CREATE DATABASE IF NOT EXISTS FLEX;
+CREATE SCHEMA IF NOT EXISTS FLEX.TRAINING_ENV;
+CREATE SCHEMA IF NOT EXISTS FLEX.<customer_name>;
+
+-- Install functions - training environment
+CREATE OR REPLACE SECURE EXTERNAL FUNCTION
+FLEX.TRAINING_ENV.FLEX("FLEXOR_ID" VARCHAR(16777216), "USER_INPUT" VARCHAR(16777216))
+  RETURNS VARIANT
+  STRICT
+  API_INTEGRATION = "FLEXOR_INTEGRATION"
+  CONTEXT_HEADERS = (CURRENT_USER)
+  MAX_BATCH_ROWS = 20000
+  AS 'https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev/binary-classification/snowflake-classify/flex/training_env';
+
+CREATE OR REPLACE SECURE EXTERNAL FUNCTION
+FLEX.TRAINING_ENV.FLEX_CREATE(user_input string, transformation_name string, data_namespace_name string)
+  RETURNS VARIANT
+  RETURNS NULL ON NULL INPUT
+  VOLATILE
+  API_INTEGRATION = "FLEXOR_INTEGRATION"
+  CONTEXT_HEADERS = (CURRENT_USER)
+  MAX_BATCH_ROWS = 1
+  AS 'https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev/binary-classification/snowflake-classify/create_flex/training_env';
+
+CREATE OR REPLACE SECURE EXTERNAL FUNCTION
+FLEX.TRAINING_ENV.FLEX_CATEGORY_SUGGEST(user_input STRING, subset_name STRING)
+  RETURNS VARIANT
+  RETURNS NULL ON NULL INPUT
+  VOLATILE
+  API_INTEGRATION = flexor_integration
+  MAX_BATCH_ROWS = 1
+  CONTEXT_HEADERS = (CURRENT_USER)
+  HEADERS = ('function' = 'category_suggestion')
+  AS 'https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev/binary-classification/snowflake-classify/category_suggestion/training_env';
+
+CREATE OR REPLACE SECURE EXTERNAL FUNCTION
+FLEX.TRAINING_ENV.FLEX_ARCHIVE("TRANSFORMATION_NAME" VARCHAR, "DATA_NAMESPACE_NAME" VARCHAR)
+  RETURNS VARIANT
+  STRICT
+  API_INTEGRATION = "FLEXOR_INTEGRATION"
+  CONTEXT_HEADERS = (CURRENT_USER)
+  MAX_BATCH_ROWS = 1
+  AS 'https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev/binary-classification/snowflake-classify/archive_column/training_env';
+
+-- Install functions - customer environment
+CREATE OR REPLACE SECURE EXTERNAL FUNCTION
+FLEX.<customer_name>.FLEX("FLEXOR_ID" VARCHAR(16777216), "USER_INPUT" VARCHAR(16777216))
+  RETURNS VARIANT
+  STRICT
+  API_INTEGRATION = "FLEXOR_INTEGRATION"
+  CONTEXT_HEADERS = (CURRENT_USER)
+  MAX_BATCH_ROWS = 20000
+  AS 'https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev/binary-classification/snowflake-classify/flex/<customer_name>';
+
+CREATE OR REPLACE SECURE EXTERNAL FUNCTION
+FLEX.<customer_name>.FLEX_CREATE(user_input string, transformation_name string, data_namespace_name string)
+  RETURNS VARIANT
+  RETURNS NULL ON NULL INPUT
+  VOLATILE
+  API_INTEGRATION = "FLEXOR_INTEGRATION"
+  CONTEXT_HEADERS = (CURRENT_USER)
+  MAX_BATCH_ROWS = 1
+  AS 'https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev/binary-classification/snowflake-classify/create_flex/<customer_name>';
+
+CREATE OR REPLACE SECURE EXTERNAL FUNCTION
+FLEX.<customer_name>.FLEX_CATEGORY_SUGGEST(user_input STRING, subset_name STRING)
+  RETURNS VARIANT
+  RETURNS NULL ON NULL INPUT
+  VOLATILE
+  API_INTEGRATION = flexor_integration
+  MAX_BATCH_ROWS = 1
+  CONTEXT_HEADERS = (CURRENT_USER)
+  HEADERS = ('function' = 'category_suggestion')
+  AS 'https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev/binary-classification/snowflake-classify/category_suggestion/<customer_name>';
+
+CREATE OR REPLACE SECURE EXTERNAL FUNCTION
+FLEX.<customer_name>.FLEX_ARCHIVE("TRANSFORMATION_NAME" VARCHAR, "DATA_NAMESPACE_NAME" VARCHAR)
+  RETURNS VARIANT
+  STRICT
+  API_INTEGRATION = "FLEXOR_INTEGRATION"
+  CONTEXT_HEADERS = (CURRENT_USER)
+  MAX_BATCH_ROWS = 1
+  AS 'https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev/binary-classification/snowflake-classify/archive_column/<customer_name>';
+
+-- Grant permissions to use the functions
+GRANT USAGE ON DATABASE FLEX TO ROLE <Flexor_user_role_name>;
+GRANT USAGE ON ALL SCHEMAS IN DATABASE FLEX TO ROLE <Flexor_user_role_name>;
+GRANT USAGE ON ALL FUNCTIONS IN DATABASE FLEX TO ROLE <Flexor_user_role_name>;
+
+-- Creates databases from flexor return share
+CREATE DATABASE TRAINING_ENV
+  FROM SHARE <flexor_account>.FLEXOR_SHARE_TRAINING_ENV;
+
+CREATE DATABASE <customer_name>
+  FROM SHARE <flexor_account>.FLEXOR_SHARE_<customer_name>;
+
+-- Grant roles to use the shared data
+GRANT IMPORTED PRIVILEGES ON DATABASE TRAINING_ENV TO ROLE <Flexor_user_role_name>;
+GRANT IMPORTED PRIVILEGES ON DATABASE <customer_name> TO ROLE <Flexor_user_role_name>;
+```
+
+#### 2. Validate integration is fully working
+
+Replace the following in the queries:
+
+- `<customer_name>` with **Customer Name** provided by Flexor
+- `<Flexor_user_role_name>` with the role you want to give privileges to use Flexor
+- `<data_namespace_table>` with dataset-specific table name - given by Flexor
+
+**Validate the training environment:**
+
+```sql
+USE ROLE <Flexor_user_role_name>;
+
+SELECT FLEX.TRAINING_ENV.FLEX(flexor_id, 'Did the customer mention that the apartment was dirty?')
+FROM FLEXOR_TRAINING.TRAINING_ENV.FLEXOR_REVIEWS_TRAINING
+LIMIT 10;
+```
+
+**Validate the customer data environment:**
+
+```sql
+USE ROLE <Flexor_user_role_name>;
+
+SELECT FLEX.<customer_name>.FLEX(flexor_id, 'Is it a text?')
+FROM <customer_name>.<customer_name>.FLEXOR_<data_namespace_table>
+LIMIT 10;
+```

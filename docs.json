@@ -63,27 +63,79 @@
                 ]
               },
               {
-                "group": "Data Share",
+                "group": "Sharing from the DWH",
                 "pages": [
-                  "data-ingestion/data-ingestion-and-sharing/data-share/snowflake"
+                  {
+                    "group": "Export to Buckets",
+                    "hidden": true,
+                    "pages": [
+                      "data-ingestion/data-ingestion-and-sharing/sharing-from-the-dwh/export-to-buckets/google-big-query",
+                      "data-ingestion/data-ingestion-and-sharing/sharing-from-the-dwh/export-to-buckets/azure-fabric",
+                      "data-ingestion/data-ingestion-and-sharing/sharing-from-the-dwh/export-to-buckets/snowflake",
+                      "data-ingestion/data-ingestion-and-sharing/sharing-from-the-dwh/export-to-buckets/databricks"
+                    ]
+                  },
+                  {
+                    "group": "Data Share",
+                    "pages": [
+                      "data-ingestion/data-ingestion-and-sharing/data-share/snowflake"
+                    ]
+                  }
                 ]
               }
             ]
+          }
+        ]
+      },
+      {
+        "tab": "Core Concepts",
+        "groups": [
+          {
+            "group": "Transformation Types",
+            "pages": [
+              "core-concepts/classificatiob",
+              "core-concepts/extraction",
+              "core-concepts/coupled-extraction",
+              "core-concepts/cateogries"
+            ]
           },
           {
-            "dropdown": "Flexor Installation"
+            "group": "Functions",
+            "pages": []
           },
           {
-            "dropdown": "Usage Guides"
-          },
-          {
-            "dropdown": "Features"
+            "group": "Schemas",
+            "pages": []
           }
         ]
       },
       {
         "tab": "Snowflake",
-        "icon": "snowflake"
+        "icon": "snowflake",
+        "pages": [
+          "snowflake/flexor-installation"
+        ]
+      },
+      {
+        "tab": "Databricks",
+        "icon": "shutters",
+        "pages": [
+          "databricks/flexor-installation"
+        ]
+      },
+      {
+        "tab": "Google BigQuery",
+        "icon": "magnifying-glass-chart",
+        "pages": [
+          "google-big-query/flexor-installation"
+        ]
+      },
+      {
+        "tab": "Azure Fabric",
+        "icon": "f",
+        "pages": [
+          "azure-fabric/flexor-installation"
+        ]
       }
     ]
   },
