@@ -164,7 +164,8 @@
             "pages": [
               "snowflake/usage-examples-copied-2/flex",
               "snowflake/usage-examples-copied-2/flex-create",
-              "snowflake/usage-examples-copied-2/flex-category-suggest"
+              "snowflake/usage-examples-copied-2/flex-category-suggest",
+              "google-big-query/usage-examples/flex-archive"
             ]
           }
         ]

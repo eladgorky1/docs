@@ -1,4 +1,151 @@
 ---
-title: 'FLEX'
+title: "FLEX"
 ---
 
+# Use FLEX with BigQuery
+
+This page describes how to use the `FLEX` function in BigQuery.
+
+## Examples
+
+<Info>
+  MESSAGE_ID - For Conversational data (e.g., Chats, Transcripts, Emails)
+
+  ENTRY_ID - For Non-Conversational data (e.g, CRM Notes, Reviews)
+
+  ELEMENT_ID - For Documents
+</Info>
+
+### Classification
+
+```sql
+WITH subset AS (
+    SELECT * FROM `my_project.my_dataset.conversations`
+    ORDER BY message_id
+    LIMIT 1000
+),
+flexor_table AS (
+    SELECT message_id, content
+    FROM subset
+    GROUP BY message_id, content
+)
+SELECT flex
+FROM (
+    SELECT `my_project.my_dataset`.FLEX(message_id, "Did the customer request a refund?") AS flex
+    FROM flexor_table
+)
+WHERE CAST(flex.answer AS boolean) = TRUE;
+```
+
+### Extraction
+
+```sql
+WITH subset AS (
+    SELECT * FROM `my_project.my_dataset.conversations`
+    ORDER BY message_id
+    LIMIT 1000
+),
+flexor_table AS (
+    SELECT message_id, content
+    FROM subset
+    GROUP BY message_id, content
+)
+SELECT flex
+FROM (
+    SELECT `my_project.my_dataset`.FLEX(message_id, "Did the customer mention a product issue? -> product") AS flex
+    FROM flexor_table
+)
+WHERE flex.answer NOT LIKE "NA";
+```
+
+### Coupled-extraction
+
+```sql
+WITH subset AS (
+    SELECT * FROM `my_project.my_dataset.conversations`
+    ORDER BY message_id
+    LIMIT 1000
+),
+flexor_table AS (
+    SELECT message_id, content
+    FROM subset
+    GROUP BY message_id, content
+)
+SELECT flex
+FROM (
+    SELECT `my_project.my_dataset`.FLEX(message_id, 
+        "Did the customer complain? -> product AS product, issue AS issue") AS flex
+    FROM flexor_table
+)
+WHERE flex.answer NOT LIKE "NA";
+```
+
+### Categories
+
+```sql
+WITH subset AS (
+    SELECT * FROM `my_project.my_dataset.conversations`
+    ORDER BY message_id
+    LIMIT 1000
+),
+flexor_table AS (
+    SELECT message_id, content
+    FROM subset
+    GROUP BY message_id, content
+)
+SELECT flex
+FROM (
+    SELECT `my_project.my_dataset`.FLEX(message_id, 
+        "Did the customer report an issue? -> issue type -> [Billing, Technical, Shipping, Account]") AS flex
+    FROM flexor_table
+)
+WHERE flex.answer NOT LIKE "NA";
+```
+
+## Parse Results as Arrays
+
+Use `JSON_EXTRACT_STRING_ARRAY` to parse results as arrays:
+
+```sql
+SELECT
+    JSON_EXTRACT_STRING_ARRAY(flex.answer) AS answer,
+    JSON_EXTRACT_STRING_ARRAY(flex.evidence) AS evidence
+FROM (
+    SELECT `my_project.my_dataset`.FLEX(message_id, "<user_input>") AS flex
+    FROM flexor_table
+)
+WHERE flex.answer NOT LIKE "NA";
+```
+
+## Aggregate Extraction and Category Results
+
+Use `UNNEST` to aggregate extraction or category results:
+
+```sql
+WITH subset AS (
+    SELECT * FROM `my_project.my_dataset.conversations`
+    ORDER BY message_id
+    LIMIT 1000
+),
+flexor_table AS (
+    SELECT message_id, content
+    FROM subset
+    GROUP BY message_id, content
+)
+SELECT
+    unnested_answer,
+    COUNT(message_id) AS count
+FROM (
+    SELECT
+        message_id,
+        JSON_EXTRACT_STRING_ARRAY(flex.answer) AS answer
+    FROM (
+        SELECT *, `my_project.my_dataset`.FLEX(message_id, "<user_input>") AS flex
+        FROM flexor_table
+    )
+    WHERE flex.answer NOT LIKE "NA"
+),
+UNNEST(answer) AS unnested_answer
+GROUP BY unnested_answer
+ORDER BY count DESC;
+```

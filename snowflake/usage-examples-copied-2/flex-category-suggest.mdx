@@ -2,3 +2,23 @@
 title: 'FLEX_CATEGORY SUGGEST'
 ---
 
+# Use FLEX_CATEGORY_SUGGEST with BigQuery
+
+This page describes how to use the `FLEX_CATEGORY_SUGGEST` function in BigQuery to get category recommendations based on your data.
+
+## Example
+
+If you have at least 10 `"Other"` results, run:
+
+```sql
+SELECT `my_project.my_dataset`.FLEX_CATEGORY_SUGGEST(
+    "Did the customer report an issue? -> issue type -> [Billing, Technical]",
+    "support_tickets"
+);
+```
+
+**Sample output:**
+
+```json
+["Tablet", "Headphones", "Camera"]
+```

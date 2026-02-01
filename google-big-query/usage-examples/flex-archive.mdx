@@ -1,0 +1,20 @@
+---
+title: 'FLEX_ARCHIVE'
+---
+# Use FLEX_ARCHIVE with BigQuery
+
+This page describes how to use the `FLEX_ARCHIVE` function in BigQuery to remove persistent columns and disable their recurring pipelines.
+
+## Example
+
+### Archive a column
+
+```sql
+SELECT `my_project.my_dataset`.FLEX_ARCHIVE("refund_request", "support_tickets");
+```
+
+This removes both columns from your output table:
+
+* `refund_request`
+* `refund_request_evidence`
+

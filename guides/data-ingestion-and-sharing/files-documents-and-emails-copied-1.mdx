@@ -13,8 +13,7 @@ To ingest data into Flexor's recurring pipeline, please structure your files as 
 
 ### 2. Create a timestamped folder on each write operation
 
-- Inside each namespace folder, create a subfolder for every batch of data using an ISO 8601 timestamp.
-- _Example:_ `legal_documents/timestamp=2024-07-17T15:30:00Z/...files`
+- Inside each namespace folder, create a subfolder for each data batch using the daily ingestion timestamp (yyyy-MM-dd). Example: `legal_documents/timestamp=2024-07-17/...files`
 
 ### 3. Use unique file names
 
