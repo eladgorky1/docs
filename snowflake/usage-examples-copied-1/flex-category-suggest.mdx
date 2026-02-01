@@ -1,4 +1,24 @@
 ---
-title: 'FLEX_CATEGORY SUGGEST'
+title: "FLEX_CATEGORY SUGGEST"
 ---
 
+This page describes how to use the `FLEX_CATEGORY_SUGGEST` function in Databricks to get category recommendations based on your data.
+
+## Example
+
+If you have at least 10 `"Other"` results, run:
+
+```sql
+%sql
+SELECT * FROM FLEX_CREATE(
+    'Did the customer report an issue? -> issue type -> [Billing, Technical]',
+    'issue_category',
+    'support_tickets'
+);
+```
+
+**Sample output:**
+
+```json
+["Tablet", "Headphones", "Camera"]
+```
