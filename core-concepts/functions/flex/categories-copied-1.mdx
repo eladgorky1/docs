@@ -1,4 +1,50 @@
 ---
-title: 'Categories'
+title: "Categories"
 ---
 
+For conceptual information about Categories, see [Categories](core_concepts_categories.md).
+
+## Overview
+
+`FLEX_CREATE` creates a persistent column in your table and activates a recurring pipeline that automatically processes new rows. Unlike `FLEX`, which runs ad-hoc queries, `FLEX_CREATE` stores results and incrementally updates them as new data arrives.
+
+## Syntax
+
+```sql
+FLEX_CREATE('<classification_input> -> <extraction_input> -> [<category_1>, <category_2>, ..., <category_n>]', '<column_name>', '<table_name>');
+```
+
+## Parameters
+
+| Parameter          | Description                                                                     |
+| ------------------ | ------------------------------------------------------------------------------- |
+| `categories_input` | A Boolean question followed by an Extraction input, followed by a Category list |
+| `column_name`      | The name of the column to create in the output table.                           |
+| `table_name`       | The table within the Flexor schema to execute the transformation on.            |
+
+## Output columns
+
+When you run `FLEX_CREATE` with a category input, the following columns are created:
+
+| Column                   | Type  | Description                                                                                                                                           |
+| ------------------------ | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<column_name>`          | Array | Matching categories. Contains `["Other"]` if no category matches, `["NA"]` if boolean is False or no entity is found, or `[""]` if not yet processed. |
+| `<column_name>_evidence` | Array | Raw text snippets that support the category assignment.                                                                                               |
+
+## Example
+
+The following example creates a persistent column to categorize returned products:
+
+```sql
+SELECT
+    FLEX_CREATE(
+        'Did the customer ask to return the product? -> product -> [TV, Computer, Phone, Tablet, Headphones]',
+        'returned_product_category',
+        '<table_name>'
+    );
+```
+
+This creates two columns in your output table:
+
+- `returned_product_category` — Array of matching categories.
+- `returned_product_category_evidence` — Array of supporting evidence text.

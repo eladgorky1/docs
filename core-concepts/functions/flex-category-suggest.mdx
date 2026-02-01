@@ -1,4 +1,58 @@
 ---
-title: 'FLEX_CATEGORY_SUGGEST'
+title: "FLEX_CATEGORY_SUGGEST"
 ---
 
+Use `FLEX_CATEGORY_SUGGEST` to get category recommendations based on your data.
+
+## Overview
+
+When using Categories, extracted values that don't match any predefined category are assigned `"Other"`. A high volume of `"Other"` results may indicate gaps in your category list.
+
+`FLEX_CATEGORY_SUGGEST` analyzes your data and suggests up to three new categories to improve coverage. The function identifies dominant patterns in `"Other"` results that could become new categories.
+
+## Prerequisites
+
+Before using `FLEX_CATEGORY_SUGGEST`:
+
+- Run `FLEX` or `FLEX_CREATE` with a categories input containing at least two categories.
+- Ensure your data contains at least 10 `"Other"` results.
+
+## Syntax
+
+```sql
+FLEX_CATEGORY_SUGGEST('<categories_input>', '<table_name>');
+```
+
+## Parameters
+
+| Parameter          | Description                                                                                                    |
+| ------------------ | -------------------------------------------------------------------------------------------------------------- |
+| `categories_input` | The same categories input used in your `FLEX` or `FLEX_CREATE` query. Must be identical to the original input. |
+| `table_name`       | The table within the Flexor schema where `FLEX` or `FLEX_CREATE` was executed.                                 |
+
+## Returns
+
+A JSON object with the following property:
+
+| Property     | Type           | Description                                                      |
+| ------------ | -------------- | ---------------------------------------------------------------- |
+| `categories` | Array (String) | Up to three suggested categories based on patterns in your data. |
+
+## Example
+
+The following example gets category suggestions for a product return categorization:
+
+```sql
+SELECT FLEX_CATEGORY_SUGGEST(
+    'Did the customer ask to return the product? -> product -> [TV, Computer, Phone]',
+    '<table_name>'
+);
+```
+
+### Sample output
+
+```json
+["Tablet", "Headphones", "Camera"]
+```
+
+## 

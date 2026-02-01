@@ -1,4 +1,48 @@
 ---
-title: 'Classification'
+title: "Classification"
 ---
 
+For conceptual information about Boolean Classification, see [Boolean Classification.](https://flexor.mintlify.app/core-concepts/classification)
+
+## Overview
+
+`FLEX_CREATE` creates a persistent column in your table and activates a recurring pipeline that automatically processes new rows. Unlike `FLEX`, which runs ad-hoc queries, `FLEX_CREATE` stores results and incrementally calculates them as new data arrives.
+
+## Syntax
+
+```sql
+FLEX_CREATE('<classification_input>', '<column_name>', '<table_name>');
+```
+
+## Parameters
+
+| Parameter              | Description                                                          |
+| ---------------------- | -------------------------------------------------------------------- |
+| `classification_input` | A True/False question to classify the text content.                  |
+| `column_name`          | The name of the column to create in the output table.                |
+| `table_name`           | The table within the Flexor schema to execute the transformation on. |
+
+## Output columns
+
+When you run `FLEX_CREATE` with a boolean question, the following columns are created:
+
+| Column                   | Type    | Description                                   |
+| ------------------------ | ------- | --------------------------------------------- |
+| `<column_name>`          | Boolean | The classification result: `True` or `False`. |
+| `<column_name>_evidence` | String  | The unaltered text that supports the answer.  |
+
+## Example
+
+The following example creates a persistent column to classify product return requests:
+
+```sql
+FLEX_CREATE('Did the customer ask to return the product?',
+        'return_product',
+        '<table_name>'
+    );
+```
+
+This creates two columns in your output table:
+
+- `return_product` — Boolean classification result.
+- `return_product_evidence` — Supporting evidence text.

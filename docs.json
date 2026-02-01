@@ -125,10 +125,6 @@
               "core-concepts/functions/flex-category-suggest",
               "core-concepts/functions/flex-archive"
             ]
-          },
-          {
-            "group": "Schemas",
-            "pages": []
           }
         ]
       },

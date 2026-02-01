@@ -1,4 +1,52 @@
 ---
-title: 'Coupled-Extraction'
+title: "Coupled-Extraction"
 ---
 
+For conceptual information about Coupled-Extraction, see [Coupled-Extraction](https://flexor.mintlify.app/core-concepts/coupled-extraction).
+
+## Overview
+
+`FLEX_CREATE` creates a persistent column in your table and activates a recurring pipeline that automatically processes new rows. Unlike `FLEX`, which runs ad-hoc queries, `FLEX_CREATE` stores results and incrementally updates them as new data arrives.
+
+## Syntax
+
+```sql
+FLEX_CREATE('<classification_input> -> <extraction_1> AS <name_1>, <extraction_2> AS <name_2>, ...', '<column_name>', '<table_name>');
+```
+
+## Parameters
+
+| Parameter                  | Description                                                          |
+| -------------------------- | -------------------------------------------------------------------- |
+| `coupled_extraction_input` | A classification input followed by multiple extraction inputs        |
+| `column_name`              | The name of the column to create in the output table.                |
+| `table_name`               | The table within the Flexor schema to execute the transformation on. |
+
+## Output columns
+
+When you run `FLEX_CREATE` with a coupled-extraction input, the following columns are created:
+
+| Column                   | Type  | Description                                                                                                                                                         |
+| ------------------------ | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<column_name>`          | Array | An array of objects containing the named extraction fields. Contains `["NA"]` if the boolean is False or no values are found. Contains `[""]` if not yet processed. |
+| `<column_name>_evidence` | Array | An array of objects with raw text snippets for each coupled extraction.                                                                                             |
+
+## Example
+
+The following example creates a persistent column to extract products and their complaints:
+
+```sql
+SELECT
+    FLEX_CREATE(
+        'Did the customer complain about a product? -> product AS product, customer complaint AS complaint',
+        'product_complaints',
+        '<table_name>'
+    );
+```
+
+This creates two columns in your output table:
+
+- `product_complaints` — Array of objects with `product` and `complaint` keys.
+- `product_complaints_evidence` — Array of objects with supporting evidence.
+
+## 

@@ -1,4 +1,53 @@
 ---
-title: 'Coupled-Extraction'
+title: "Coupled-Extraction"
 ---
 
+For conceptual information about Coupled-Extraction, see [Coupled-Extraction](https://flexor.mintlify.app/core-concepts/coupled-extraction).
+
+## Syntax
+
+```sql
+FLEX(MESSAGE_ID/ELEMENT_ID/ENTRY_ID, '<boolean_input> -> <extraction_1> AS <name_1>, <extraction_2> AS <name_2>, ...')
+```
+
+<Info>
+  MESSAGE_ID - For Conversational data (e.g., Chats, Transcripts, Emails)
+
+  ENTRY_ID - For Non-Conversational data (e.g, CRM Notes, Reviews)
+
+  ELEMENT_ID - For Documents
+</Info>
+
+## Parameters
+
+| Parameter                        | Description                                                   |
+| -------------------------------- | ------------------------------------------------------------- |
+| `MESSAGE_ID/ELEMENT_ID/ENTRY_ID` | The unique identifier for the row being processed.            |
+| `coupled_extraction_input`       | A classification input followed by multiple extraction inputs |
+
+## Example
+
+```sql
+FLEX(message_id, 'Did the customer complain about a product? -> product AS product, customer complaint AS complaint')
+```
+
+## Returns
+
+A JSON object with the following properties:
+
+| Property   | Type   | Description                                                                                                                          |
+| ---------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `answer`   | String | A JSON array of objects, each containing the named extraction fields. Returns `"NA"` if the boolean is False or no values are found. |
+| `evidence` | String | A JSON array of objects with raw text snippets for each coupled extraction.                                                          |
+| `viewer`   | String | A link to the full text with evidence highlighted.                                                                                   |
+
+### Answer format
+
+```json
+[
+  {"product": "Laptop", "complaint": "Screen is cracked"},
+  {"product": "Mouse", "complaint": "Not connecting"}
+]
+```
+
+## 

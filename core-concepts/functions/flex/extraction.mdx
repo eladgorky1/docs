@@ -1,4 +1,42 @@
 ---
-title: 'Extraction'
+title: "Extraction"
 ---
 
+For conceptual information about Extraction, see [Extraction](https://flexor.mintlify.app/core-concepts/extraction).
+
+## Syntax
+
+```sql
+FLEX(MESSAGE_ID/ELEMENT_ID/ENTRY_ID, '<classification_input> -> <extraction_input>')
+```
+
+<Info>
+  MESSAGE_ID - For Conversational data (e.g., Chats, Transcripts, Emails)
+
+  ENTRY_ID - For Non-Conversational data (e.g, CRM Notes, Reviews)
+
+  ELEMENT_ID - For Documents
+</Info>
+
+## Parameters
+
+| Parameter                        | Description                                            |
+| -------------------------------- | ------------------------------------------------------ |
+| `MESSAGE_ID/ELEMENT_ID/ENTRY_ID` | The unique identifier for the row being processed.     |
+| `extraction_input`               | A classification input followed by an Extraction input |
+
+## Example
+
+```sql
+FLEX(message_id, 'Did the customer ask to return the product? -> product')
+```
+
+## Returns
+
+A JSON object with the following properties:
+
+| Property   | Type   | Description                                                                                                |
+| ---------- | ------ | ---------------------------------------------------------------------------------------------------------- |
+| `answer`   | String | A JSON array of normalized extracted values. Returns `"NA"` if the boolean is False or no entity is found. |
+| `evidence` | String | A JSON array of raw text snippets corresponding to each extraction.                                        |
+| `viewer`   | String | A link to the full text with evidence highlighted.                                                         |

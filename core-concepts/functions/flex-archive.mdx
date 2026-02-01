@@ -1,4 +1,29 @@
 ---
-title: 'FLEX_ARCHIVE'
+title: "FLEX_ARCHIVE"
 ---
 
+Use `FLEX_ARCHIVE` to remove a persistent column created with `FLEX_CREATE` and disable its recurring pipeline.
+
+## Overview
+
+When you no longer need a persistent column, use `FLEX_ARCHIVE` to:
+
+- Remove the column from your output table.
+- Disable the recurring transformation pipeline.
+
+This helps maintain a cleaner table structure with only the necessary columns.
+
+## Syntax
+
+```sql
+FLEX_ARCHIVE('<column_name>', '<table_name>');
+```
+
+## Parameters
+
+| Parameter     | Description                                                 |
+| ------------- | ----------------------------------------------------------- |
+| `column_name` | The name of the column to archive.                          |
+| `table_name`  | The table within the Flexor schema where the column exists. |
+
+## 
