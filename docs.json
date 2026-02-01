@@ -16,9 +16,9 @@
       {
         "tab": "Getting Started",
         "icon": "upload",
-        "menu": [
+        "anchors": [
           {
-            "item": "Data Types & Schemas",
+            "anchor": "Data Types & Schemas",
             "pages": [
               "guides/data-types-and-schemas/crm_notes",
               "guides/data-types-and-schemas/surveys-1",
@@ -30,7 +30,7 @@
             ]
           },
           {
-            "item": "Data Ingestion & Sharing",
+            "anchor": "Data Ingestion & Sharing",
             "pages": [
               {
                 "group": "Buckets",
