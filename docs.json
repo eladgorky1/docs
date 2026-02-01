@@ -31,7 +31,10 @@
             "group": "Data Types & Schemas",
             "pages": [
               "guides/data-types-and-schemas/crm_notes",
-              "guides/data-types-and-schemas/surveys"
+              "guides/data-types-and-schemas/surveys-1",
+              "guides/data-types-and-schemas/reviews",
+              "guides/data-types-and-schemas/chats-copied-1",
+              "guides/data-types-and-schemas/chats"
             ]
           },
           {
