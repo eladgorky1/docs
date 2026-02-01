@@ -26,9 +26,9 @@
     "tabs": [
       {
         "tab": "Data Ingestion",
-        "groups": [
+        "dropdowns": [
           {
-            "group": "Data Types & Schemas",
+            "dropdown": "Data Types & Schemas",
             "pages": [
               "guides/data-types-and-schemas/crm_notes",
               "guides/data-types-and-schemas/surveys-1",
@@ -40,7 +40,7 @@
             ]
           },
           {
-            "group": "Data Ingestion & Sharing",
+            "dropdown": "Data Ingestion & Sharing",
             "pages": [
               {
                 "group": "Buckets",
@@ -64,21 +64,20 @@
               },
               {
                 "group": "Data Share",
-                "pages": []
+                "pages": [
+                  "data-ingestion/data-ingestion-and-sharing/data-share/snowflake"
+                ]
               }
             ]
           },
           {
-            "group": "Flexor Installation",
-            "pages": []
+            "dropdown": "Flexor Installation"
           },
           {
-            "group": "Usage Guides",
-            "pages": []
+            "dropdown": "Usage Guides"
           },
           {
-            "group": "Features",
-            "pages": []
+            "dropdown": "Features"
           }
         ]
       },

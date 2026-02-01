@@ -9,7 +9,7 @@ title: "Amazon S3"
 - AWS IAM user or role with Administrator or IAM Full Access
 - AWS user or role with S3 Full Access permissions
 
-## Part 1: Setting Up Access to S3 Bucket
+## Setting Up Access to S3 Bucket
 
 ### Overview
 
@@ -206,51 +206,3 @@ After completing the setup, provide Flexor with the following information:
 - **Role ARN:** The ARN output from Step 5 (format: `arn:aws:iam::ACCOUNT_ID:role/flexor-s3-access-role`)
 - **S3 Bucket Name:** `flexor-<region>-external-s3-<customer_name>`
 - **Region:** Your chosen AWS region
-
----
-
-## Part 2: Folder & File Structure Requirements
-
-To ingest data into Flexor's recurring pipeline, please structure your files as follows:
-
-### 1. Organize data by namespace
-
-- Create a separate folder for each data namespace.
-- The folder name will determine the target Flexor table name.
-- _Example:_ Place SEC filing documents in a folder named `sec_filings`. This will map to a table named `sec_filings`.
-
-### 2. Create a timestamped folder on each write operation
-
-- Inside each namespace folder, create a subfolder for every batch of data using an ISO 8601 timestamp.
-- _Example:_ `sec_filings/timestamp=2024-07-17T15:30:00Z/...files`
-
-### 3. Use unique file names
-
-- **Flexor assumes file names are unique and are used as identifiers.**
-- Each file must have a unique file name.
-- This file name will be used as the `joinable_id` in your final Flexor table.
-- Our system uses this ID to deduplicate records (duplicates with the same `joinable_id` are dropped).
-
-### 4. Supported file formats
-
-Please ensure that files in each batch directory are in the following format:
-
-- **Document formats:** HTML
-
-### Example Structure
-
-```
-s3://flexor-us-east-1-external-s3-<customer_name>/
-└── sec_filings/
-    ├── timestamp=2024-07-17T15:30:00Z/
-    │   ├── filing_10k_2024_001.html
-    │   ├── filing_10q_2024_002.html
-    │   └── filing_8k_2024_003.html
-    ├── timestamp=2024-07-18T09:00:00Z/
-    │   ├── filing_10k_2024_004.html
-    │   └── filing_10q_2024_005.html
-    └── timestamp=2024-07-19T14:45:00Z/
-        ├── filing_8k_2024_006.html
-        ├── filing_10k_2024_007.html
-        └── filing_10q_2024_008.html
-```

@@ -1,0 +1,50 @@
+---
+title: "Snowflake"
+---
+
+## Prerequisite
+
+- A user with _ACCOUNTADMIN_ (aka Account Administrator) or _ORGADMIN_ (aka Organization Administrator) permissions.
+
+## Step-by-Step
+
+### 1. Create the Source Table
+
+Create the table you'll share with Flexor. Enable change tracking so we can efficiently detect and process only new or modified rows rather than rescanning the full table.
+
+```sql
+CREATE TABLE <database>.<schema>.<table_name> (
+  <table_definition>
+) CHANGE_TRACKING = TRUE;
+```
+
+### 2. Verify Schema
+
+[Data Types & Schemas](https://flexor.mintlify.app/guides/data-types-and-schemas).
+
+### 3. Create and Configure the Share
+
+Execute the subsequent query, specifying the following parameters:
+
+| Parameter      | Description                                            |
+| -------------- | ------------------------------------------------------ |
+| database_name  | The database you want to share                         |
+| schema_name    | The schema you want to share                           |
+| table_name     | The table that you want to share                       |
+| flexor_account | Account identifier given by Flexor for the integration |
+
+```sql
+create share share_to_flexor;
+grant usage on database <database_name> to share share_to_flexor;
+grant usage on schema <schema_name> to share share_to_flexor;
+use database <database_name>;
+use schema <schema_name>;
+grant select on table <schema_name>.<table_name> to share share_to_flexor;
+alter share share_to_flexor add accounts = <flexor_account>;
+```
+
+> **Note:** The actions described above grant Flexor access exclusively to the specified `<table_name>`, without providing access to any other resources.
+
+### 4. Additional Resources
+
+For additional details, you may refer to the [Snowflake guide for sharing](https://docs.snowflake.com/en/user-guide/data-sharing-provider) as a valuable resource.
