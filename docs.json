@@ -14,11 +14,11 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Data Ingestion",
+        "tab": "Getting Started",
         "icon": "upload",
-        "dropdowns": [
+        "anchors": [
           {
-            "dropdown": "Data Types & Schemas",
+            "anchor": "Data Types & Schemas",
             "pages": [
               "guides/data-types-and-schemas/crm_notes",
               "guides/data-types-and-schemas/surveys-1",
@@ -30,7 +30,7 @@
             ]
           },
           {
-            "dropdown": "Data Ingestion & Sharing",
+            "anchor": "Data Ingestion & Sharing",
             "pages": [
               {
                 "group": "Buckets",
