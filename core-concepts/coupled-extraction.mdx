@@ -1,4 +1,64 @@
 ---
-title: 'Coupled-Extraction'
+title: "Coupled-Extraction"
 ---
 
+## Overview
+
+Use Coupled-Extraction when you need to extract multiple values that are semantically related to each other. Unlike standard Extraction, which returns separate arrays for each entity, Coupled-Extraction ensures that all values within each extraction are grouped together.
+
+Coupled-Extraction combines the following components:
+
+1. **Boolean context.** A True/False question that defines when extraction should occur.
+2. **Multiple extraction targets.** A list of related values to extract together, each with a named identifier.
+
+## Output
+
+Coupled-Extraction returns the following properties:
+
+| Property   | Description                                                                                                                         |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `answer`   | Each object contains the named extraction fields as key-value pairs. Returns `"NA"` if the boolean is False or no values are found. |
+| `evidence` | Raw, unaltered evidence strings for each coupled extraction, in the same order and structure as the answer.                         |
+| `viewer`   | A direct link to the full text with relevant evidence highlighted.                                                                  |
+
+### Answer format
+
+The `answer` property returns a JSON array where each item is an object containing the related extracted values:
+
+```json
+[
+  {
+    "product": "Laptop",
+    "complaint": "The screen is completely cracked"
+  },
+  {
+    "product": "Wireless mouse",
+    "complaint": "won't connect to bluetooth anymore"
+  }
+]
+```
+
+### Evidence format
+
+The `evidence` property mirrors the structure of the answer with raw text snippets:
+
+```json
+[
+  {
+    "product": "my laptop",
+    "complaint": "The screen is completely cracked"
+  },
+  {
+    "product": "Wireless mouse",
+    "complaint": "won't connect to bluetooth anymore"
+  }
+]
+```
+
+### Normalization
+
+Extracted values are automatically normalized to handle:
+
+- Typos and misspellings
+- Capitalization differences
+- Common variations in how the same entity is expressed

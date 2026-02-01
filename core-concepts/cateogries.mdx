@@ -1,4 +1,39 @@
 ---
-title: 'Cateogries'
+title: "Cateogries"
 ---
 
+## Overview
+
+Use Categories to map extracted values to a set of predefined categories. Categories builds on Extraction by taking extracted values and classifying them into groups you specify.
+
+Categories combine the following components:
+
+1. **Boolean context.** A True/False question that defines when categorization should occur.
+2. **Extraction target.** The entity to extract and categorize.
+3. **Category list.** A predefined list of up to 10 categories to classify the extracted values into.
+
+The context from the Boolean question and extraction target influences which category is selected for each row.
+
+## Output
+
+Categories return the following properties:
+
+| Property   | Description                                                                                                   |
+| ---------- | ------------------------------------------------------------------------------------------------------------- |
+| `answer`   | The relevant categories inferred from the text. Returns `"NA"` if the boolean is False or no entity is found. |
+| `evidence` | Raw text snippets that support the category assignment, in the same order as the categories.                  |
+| `viewer`   | A direct link to the full text with relevant evidence highlighted.                                            |
+
+### The "Other" category
+
+When the boolean condition is True and an entity is extracted, but no suitable category is found in your predefined list, the system assigns `"Other"` as the category. This ensures data completeness and helps you identify gaps in your category list.
+
+## Best practices
+
+When designing your category list, consider the following:
+
+- **Make categories mutually exclusive.** Design categories that don't overlap significantly.
+- **Be collectively exhaustive.** Cover the main scenarios you expect to encounter.
+- **Use clear definitions.** Choose unambiguous category names.
+- **Choose appropriate granularity.** Avoid categories that are too broad (loses meaning) or too narrow (too many "Other" results).
+- **Limit to 10 categories.** Keep your category list focused and manageable.

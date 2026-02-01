@@ -1,0 +1,25 @@
+---
+title: "Classification"
+---
+
+Boolean Classification evaluates text against a True/False question or statement and returns a Boolean answer with supporting evidence.
+
+## Overview
+
+Use Boolean Classification to classify unstructured data by asking questions or statements that can be answered with True or False. Flexor analyzes each record and determines whether the condition in your question is met.
+
+Example questions:
+
+- "Did the customer ask to return the product?"
+- "Does the invoice specify the total amount?"
+- "The agent offered a discount"
+
+## Output
+
+Boolean Classification returns the following properties:
+
+| Property   | Description                                                            |
+| ---------- | ---------------------------------------------------------------------- |
+| `answer`   | The Boolean classification result: `True` or `False`.                  |
+| `evidence` | The unaltered extracted text from the source that supports the answer. |
+| `viewer`   | A direct link to the full text with relevant evidence highlighted.     |

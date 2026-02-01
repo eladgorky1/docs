@@ -1,0 +1,42 @@
+---
+title: "Classification"
+---
+
+Use `FLEX` with a boolean question to classify text as True or False.
+
+For conceptual information about Boolean Classification, see [Boolean Classification.](https://flexor.mintlify.app/core-concepts/functions/flex/classification)
+
+## Syntax
+
+```sql
+FLEX(MESSAGE_ID/ELEMENT_ID/ENTRY_ID, '<boolean_question>')
+```
+
+<Info>
+  ```sql
+  MESSAGE_ID - For Conversational data (e.g., Chats, Tramscripts, Emails).
+  ENTRY_ID - For Non-Conversational data (e.g, CRM Notes, Reviews)
+  ELEMENT_ID - For Documents.
+  ```
+</Info>
+
+## Parameters
+
+| Parameter                        | Description                                                      |
+| -------------------------------- | ---------------------------------------------------------------- |
+| `MESSAGE_ID/ELEMENT_ID/ENTRY_ID` | The unique identifier for the row being processed.               |
+| `boolean_question`               | A True/False question or statement to classify the text content. |
+
+## Returns
+
+A JSON object with the following properties:
+
+| Property   | Type   | Description                                                     |
+| ---------- | ------ | --------------------------------------------------------------- |
+| `answer`   | String | `True` or `False`. Cast to a boolean using the `CAST` function. |
+| `evidence` | String | The unaltered text that supports the answer.                    |
+| `viewer`   | String | A link to the full text with evidence highlighted.              |
+
+## Usage Guides
+
+- Maximum of 10,000 rows per query.
