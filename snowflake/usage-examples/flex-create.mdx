@@ -1,0 +1,107 @@
+---
+title: "FLEX_CREATE"
+---
+
+# Use FLEX_CREATE with Snowflake
+
+This page describes how to use the `FLEX_CREATE` function in Snowflake.
+
+## Examples
+
+### Classification
+
+```sql
+SELECT FLEX_CREATE(
+    'Did the customer request a refund?',
+    'refund_request',
+    'conversations'
+);
+```
+
+Query results:
+
+```sql
+SELECT message_id, refund_request, refund_request_evidence
+FROM conversations
+WHERE refund_request = TRUE;
+```
+
+### Extraction
+
+```sql
+SELECT FLEX_CREATE(
+    'Did the customer mention a product issue? -> product',
+    'issue_product',
+    'conversations'
+);
+```
+
+Query results:
+
+```sql
+SELECT flatten_col.value AS product
+FROM conversations,
+    TABLE(FLATTEN(INPUT => issue_product)) AS flatten_col
+WHERE ARRAY_SIZE(issue_product) > 0
+    AND flatten_col.value != 'NA';
+```
+
+### Coupled-extraction
+
+```sql
+SELECT FLEX_CREATE(
+    'Did the customer complain? -> product AS product, issue AS issue',
+    'product_issues',
+    'conversations'
+);
+```
+
+Query results:
+
+```sql
+SELECT
+    flatten_col.value:product AS product,
+    flatten_col.value:issue AS issue
+FROM conversations,
+    TABLE(FLATTEN(INPUT => product_issues)) AS flatten_col
+WHERE ARRAY_SIZE(product_issues) > 0
+    AND flatten_col.value != 'NA';
+```
+
+### Categories
+
+```sql
+SELECT FLEX_CREATE(
+    'Did the customer report an issue? -> issue type -> [Billing, Technical, Shipping, Account]',
+    'issue_category',
+    'conversations'
+);
+```
+
+Query results:
+
+```sql
+SELECT flatten_col.value AS category
+FROM conversations,
+    TABLE(FLATTEN(INPUT => issue_category)) AS flatten_col
+WHERE ARRAY_SIZE(issue_category) > 0
+    AND flatten_col.value != 'NA';
+```
+
+## Aggregate Extraction and Category Results
+
+Count occurrences of each value:
+
+```sql
+SELECT
+    flatten_col.value AS value,
+    COUNT(*) AS count
+FROM <table_name>,
+    TABLE(FLATTEN(INPUT => <column_name>)) AS flatten_col
+WHERE ARRAY_SIZE(<column_name>) > 0
+    AND flatten_col.value != 'NA'
+GROUP BY value
+ORDER BY count DESC;
+```
+
+## 

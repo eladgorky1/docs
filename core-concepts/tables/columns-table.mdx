@@ -1,0 +1,38 @@
+---
+title: "Columns Table"
+---
+
+The `FLEXOR_COLUMNS` table provides a comprehensive overview of your deployed columns and their processing status.
+
+## Overview
+
+Use the `FLEXOR_COLUMNS` table to:
+
+- Monitor the status of your persistent columns.
+- Track processing progress for each column.
+- View column configuration and metadata.
+
+## Syntax
+
+```sql
+SELECT * FROM flexor_columns;
+```
+
+## Columns
+
+| Column                 | Type      | Description                                                 |
+| ---------------------- | --------- | ----------------------------------------------------------- |
+| `name`                 | String    | The name of the deployed column.                            |
+| `user_input`           | String    | The transformation input provided when creating the column. |
+| `data_namespace_name`  | String    | The namespace (table) to which the column belongs.          |
+| `status`               | String    | The current status of the deployed column.                  |
+| `last_successful_run`  | Timestamp | The timestamp of the last successful pipeline run.          |
+| `percentage_processed` | Number    | The percentage of rows that have been processed.            |
+| `processed_rows`       | Number    | The number of rows that have been processed.                |
+| `total_rows`           | Number    | The total number of rows in the table.                      |
+| `created_by`           | String    | The user who created the column.                            |
+| `created_at`           | Timestamp | The timestamp when the column was created.                  |
+| `text_type`            | String    | The type of text data.                                      |
+| `id`                   | String    | A unique identifier for the column.                         |
+
+## 

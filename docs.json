@@ -114,6 +114,12 @@
               "core-concepts/functions/flex-category-suggest",
               "core-concepts/functions/flex-archive"
             ]
+          },
+          {
+            "group": "Tables",
+            "pages": [
+              "core-concepts/tables/columns-table"
+            ]
           }
         ]
       },
@@ -121,28 +127,60 @@
         "tab": "Snowflake",
         "icon": "snowflake",
         "pages": [
-          "snowflake/flexor-installation"
+          "snowflake/flexor-installation",
+          {
+            "group": "Usage Examples",
+            "pages": [
+              "snowflake/usage-examples/flex",
+              "snowflake/usage-examples/flex-create",
+              "snowflake/usage-examples/untitled-page",
+              "snowflake/usage-examples/untitled-page-copied-1"
+            ]
+          }
         ]
       },
       {
         "tab": "Databricks",
         "icon": "shutters",
         "pages": [
-          "databricks/flexor-installation"
+          "databricks/flexor-installation",
+          {
+            "group": "Usage Examples",
+            "pages": [
+              "snowflake/usage-examples-copied-1/flex",
+              "snowflake/usage-examples-copied-1/flex-create",
+              "snowflake/usage-examples-copied-1/flex-category-suggest"
+            ]
+          }
         ]
       },
       {
         "tab": "Google BigQuery",
         "icon": "magnifying-glass-chart",
-        "pages": [
-          "google-big-query/flexor-installation"
+        "groups": [
+          {
+            "group": "Usage Examples",
+            "pages": [
+              "snowflake/usage-examples-copied-2/flex",
+              "snowflake/usage-examples-copied-2/flex-create",
+              "snowflake/usage-examples-copied-2/flex-category-suggest"
+            ]
+          }
         ]
       },
       {
         "tab": "Azure Fabric",
         "icon": "f",
         "pages": [
-          "azure-fabric/flexor-installation"
+          "azure-fabric/flexor-installation",
+          {
+            "group": "Usage Examples",
+            "pages": [
+              "snowflake/usage-examples-copied-3/flex",
+              "snowflake/usage-examples-copied-3/flex-create",
+              "snowflake/usage-examples-copied-3/flex-category-suggest"
+            ]
+          }
         ]
       }
     ]

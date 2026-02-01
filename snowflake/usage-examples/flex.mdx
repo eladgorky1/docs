@@ -1,0 +1,109 @@
+---
+title: "FLEX"
+---
+
+# Use FLEX with Snowflake
+
+This page describes how to use the `FLEX` function in Snowflake.
+
+## Examples
+
+<Info>
+  MESSAGE_ID - For Conversational data (e.g., Chats, Transcripts, Emails)
+
+  ENTRY_ID - For Non-Conversational data (e.g, CRM Notes, Reviews)
+
+  ELEMENT_ID - For Documents
+</Info>
+
+
+### Classification
+
+```sql
+SELECT
+    flex:answer AS answer,
+    flex:evidence AS evidence,
+    flex:viewer::text AS viewer
+FROM
+    (
+        SELECT FLEX(message_id, 'Did the customer request a refund?') AS flex
+        FROM my_database.my_schema.conversations
+        ORDER BY conversation_id, ordering_index
+        LIMIT 1000
+    )
+WHERE CAST(flex:answer AS boolean) = TRUE;
+```
+
+### Extraction
+
+```sql
+SELECT
+    TRY_PARSE_JSON(flex:answer) AS answer,
+    TRY_PARSE_JSON(flex:evidence) AS evidence,
+    flex:viewer::text AS viewer
+FROM
+    (
+        SELECT FLEX(message_id, 'Did the customer mention a product issue? -> product') AS flex
+        FROM my_database.my_schema.conversations
+        ORDER BY conversation_id, ordering_index
+        LIMIT 1000
+    )
+WHERE flex:answer NOT LIKE 'NA';
+```
+
+### Coupled-extraction
+
+```sql
+SELECT
+    TRY_PARSE_JSON(flex:answer) AS answer,
+    TRY_PARSE_JSON(flex:evidence) AS evidence,
+    flex:viewer::text AS viewer
+FROM
+    (
+        SELECT FLEX(message_id, 
+            'Did the customer complain? -> product AS product, issue AS issue') AS flex
+        FROM my_database.my_schema.conversations
+        ORDER BY conversation_id, ordering_index
+        LIMIT 1000
+    )
+WHERE flex:answer NOT LIKE 'NA';
+```
+
+### Categories
+
+```sql
+SELECT
+    TRY_PARSE_JSON(flex:answer) AS answer,
+    TRY_PARSE_JSON(flex:evidence) AS evidence,
+    flex:viewer::text AS viewer
+FROM
+    (
+        SELECT FLEX(message_id, 
+            'Did the customer report an issue? -> issue type -> [Billing, Technical, Shipping, Account]') AS flex
+        FROM my_database.my_schema.conversations
+        ORDER BY conversation_id, ordering_index
+        LIMIT 1000
+    )
+WHERE flex:answer NOT LIKE 'NA';
+```
+
+## Aggregate Extraction and Category Results
+
+Use `LATERAL FLATTEN` to aggregate extraction or category results:
+
+```sql
+SELECT
+    value AS extracted_value,
+    COUNT(*) AS count
+FROM
+    (
+        SELECT FLEX(message_id, '<user_input>') AS flex
+        FROM my_database.my_schema.conversations
+        ORDER BY conversation_id, ordering_index
+        LIMIT 1000
+    ),
+    LATERAL FLATTEN(INPUT => TRY_PARSE_JSON(flex:answer))
+WHERE flex:answer NOT LIKE 'NA'
+GROUP BY extracted_value
+ORDER BY count DESC;
+```
