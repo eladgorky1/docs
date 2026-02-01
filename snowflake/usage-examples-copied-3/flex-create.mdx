@@ -1,4 +1,76 @@
 ---
-title: 'FLEX_CREATE'
+title: "FLEX_CREATE"
 ---
 
+# Use FLEX_CREATE with Azure Fabric
+
+This page describes how to use the `FLEX_CREATE` function in Azure Fabric.
+
+## Examples
+
+### Classification
+
+```sql
+%%sql
+SELECT FLEX_CREATE(
+    'Did the customer request a refund?',
+    'refund_request',
+    'conversations'
+);
+```
+
+### Extraction
+
+```sql
+%%sql
+SELECT FLEX_CREATE(
+    'Did the customer mention a product issue? -> product',
+    'issue_product',
+    'conversations'
+);
+```
+
+### Coupled-extraction
+
+```sql
+%%sql
+SELECT FLEX_CREATE(
+    'Did the customer complain? -> product AS product, issue AS issue',
+    'product_issues',
+    'conversations'
+);
+```
+
+### Categories
+
+```sql
+%%sql
+SELECT FLEX_CREATE(
+    'Did the customer report an issue? -> issue type -> [Billing, Technical, Shipping, Account]',
+    'issue_category',
+    'conversations'
+);
+```
+
+## Filter Results
+
+Use `IS NOT NULL` and string comparison to filter out empty and `NA` results:
+
+```sql
+%%sql
+SELECT <column_name>
+FROM <dataset_name>.<table_name>
+WHERE <column_name> IS NOT NULL
+    AND <column_name> <> '["NA"]';
+```
+
+## Unnested View
+
+Flexor provides an unnested view for Extraction and Category columns where each value is displayed in a separate row.
+
+```sql
+%%sql
+SELECT *
+FROM <table_name>_unnested
+WHERE column_name LIKE '<column_name>';
+```

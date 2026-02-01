@@ -1,4 +1,166 @@
 ---
-title: 'FLEX'
+title: "FLEX"
 ---
 
+# Use FLEX with Azure Fabric
+
+This page describes how to use the `FLEX` function in Azure Fabric.
+
+## Examples
+
+<Info>
+  MESSAGE_ID - For Conversational data (e.g., Chats, Transcripts, Emails)
+
+  ENTRY_ID - For Non-Conversational data (e.g, CRM Notes, Reviews)
+
+  ELEMENT_ID - For Documents
+</Info>
+
+### Classification
+
+```python
+import sys
+sys.path.append("/lakehouse/default/Files")
+import flexor
+flexor.init("<Azure Key Vault URL>")
+
+flexor_result = spark.sql("""
+WITH dataset AS (
+    SELECT element_id
+    FROM <dataset_name>.<table_name>
+    LIMIT 1000
+)
+SELECT
+    flex.answer,
+    flex.evidence,
+    flex.viewer
+FROM (
+    SELECT FLEX(element_id, 'Did the customer request a refund?') AS flex
+    FROM dataset
+)
+WHERE flex.answer LIKE "True"
+""")
+
+output = flexor_result.limit(10000).toPandas()
+display(output)
+```
+
+### Extraction
+
+```python
+import sys
+sys.path.append("/lakehouse/default/Files")
+import flexor
+flexor.init("<Azure Key Vault URL>")
+
+flexor_result = spark.sql("""
+WITH dataset AS (
+    SELECT element_id
+    FROM <dataset_name>.<table_name>
+    LIMIT 1000
+)
+SELECT
+    flex.answer,
+    flex.evidence,
+    flex.viewer
+FROM (
+    SELECT FLEX(element_id, 'Did the customer mention a product issue? -> product') AS flex
+    FROM dataset
+)
+WHERE flex.answer NOT LIKE "NA"
+""")
+
+output = flexor_result.limit(10000).toPandas()
+display(output)
+```
+
+### Coupled-extraction
+
+```python
+import sys
+sys.path.append("/lakehouse/default/Files")
+import flexor
+flexor.init("<Azure Key Vault URL>")
+
+flexor_result = spark.sql("""
+WITH dataset AS (
+    SELECT element_id
+    FROM <dataset_name>.<table_name>
+    LIMIT 1000
+)
+SELECT
+    flex.answer,
+    flex.evidence,
+    flex.viewer
+FROM (
+    SELECT FLEX(element_id, 'Did the customer complain? -> product AS product, issue AS issue') AS flex
+    FROM dataset
+)
+WHERE flex.answer NOT LIKE "NA"
+""")
+
+output = flexor_result.limit(10000).toPandas()
+display(output)
+```
+
+### Categories
+
+```python
+import sys
+sys.path.append("/lakehouse/default/Files")
+import flexor
+flexor.init("<Azure Key Vault URL>")
+
+flexor_result = spark.sql("""
+WITH dataset AS (
+    SELECT element_id
+    FROM <dataset_name>.<table_name>
+    LIMIT 1000
+)
+SELECT
+    flex.answer,
+    flex.evidence,
+    flex.viewer
+FROM (
+    SELECT FLEX(element_id, 'Did the customer report an issue? -> issue type -> [Billing, Technical, Shipping, Account]') AS flex
+    FROM dataset
+)
+WHERE flex.answer NOT LIKE "NA"
+""")
+
+output = flexor_result.limit(10000).toPandas()
+display(output)
+```
+
+## Aggregate Extraction and Category Results
+
+```python
+import sys
+sys.path.append("/lakehouse/default/Files")
+import flexor
+flexor.init("<Azure Key Vault URL>")
+
+flexor_result = spark.sql("""
+WITH dataset AS (
+    SELECT element_id
+    FROM <dataset_name>.<table_name>
+    LIMIT 1000
+),
+flex_results AS (
+    SELECT FLEX(element_id, '<user_input>') AS flex
+    FROM dataset
+)
+SELECT
+    unnested_answer,
+    COUNT(*) AS cnt
+FROM (
+    SELECT EXPLODE(from_json(flex.answer, 'array<string>')) AS unnested_answer
+    FROM flex_results
+)
+GROUP BY unnested_answer
+ORDER BY cnt DESC
+""")
+
+output = flexor_result.limit(10000).toPandas()
+display(output)
+```

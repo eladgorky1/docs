@@ -180,7 +180,8 @@
             "pages": [
               "snowflake/usage-examples-copied-3/flex",
               "snowflake/usage-examples-copied-3/flex-create",
-              "snowflake/usage-examples-copied-3/flex-category-suggest"
+              "snowflake/usage-examples-copied-3/flex-category-suggest",
+              "azure-fabric/usage-examples/flex-archive"
             ]
           }
         ]
