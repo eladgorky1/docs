@@ -1,0 +1,43 @@
+---
+title: "Azure Blob Storage"
+---
+
+## Authentication
+
+First, register an application and add a federated credential:
+
+1. Sign in to [https://portal.azure.com](https://portal.azure.com).
+2. Go to the **App registrations** page.
+3. Click **New registration**.
+4. Enter a name. For example, `flexor-ingestion-app`.
+5. Select **Accounts in this organizational directory only**.
+6. Click **Register**. The application is created. Note the `Application (client) ID` and the `Directory (tenant) ID`. You can also retrieve these later from the application's **Overview** page.
+7. Click **Certificates & secrets** and select the **Federated credentials** tab.
+8. Click **Add credential**.
+9. Select **Other issuer** as the scenario and enter the following information:
+   - Issuer: `https://accounts.google.com`
+   - Subject identifier: Should be provided by **Flexor**.
+   - A unique name for the federated credential.
+   - Audience must remain as `api://AzureADTokenExchange`.
+10. Click **Add**.
+
+Next, grant the application access to your Azure Storage container:
+
+1. Go to the **Storage Accounts** page in your Azure account.
+2. Select your storage account and select **Containers** from the **Data storage** section.
+3. Click the bucket to which you want to grant access.
+4. Click **Access Control (IAM)** from the left menu and select the **Roles** tab.
+5. Click the overflow (`...`) menu next to any role and select **Clone**.
+6. Enter a name for this custom role and select **Start from scratch**. Click **Next**.
+7. Click **Add permissions** and search for `Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read`.
+8. Click the **Microsoft Storage** card that appears.
+9. Select the **Data actions** radio button.
+10. Select **Read : Read Blob**.
+11. Click **Add**.
+12. Click **Review + create**, then **Create**. You are returned to the bucket's **Access Control (IAM)** page.
+13. Click **Add** and select **Add role assignment**.
+14. From the list of roles, select your custom role and click **Next**.
+15. Click **Select members**.
+16. In the **Select** field, enter the name of the application that you previously registered. For example, `flexor-ingestion-app`.
+17. Click the application tile and click **Select**.
+18. Click **Review + assign**.

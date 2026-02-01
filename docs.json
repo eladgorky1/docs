@@ -25,7 +25,7 @@
     },
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Data Ingestion",
         "groups": [
           {
             "group": "Data Types & Schemas",
@@ -41,7 +41,32 @@
           },
           {
             "group": "Data Ingestion & Sharing",
-            "pages": []
+            "pages": [
+              {
+                "group": "Buckets",
+                "pages": [
+                  {
+                    "group": "Object Storage",
+                    "pages": [
+                      "guides/data-ingestion-and-sharing/buckets/object-storage/untitled-page",
+                      "guides/data-ingestion-and-sharing/buckets/object-storage/amazon-s3",
+                      "guides/data-ingestion-and-sharing/buckets/object-storage/gcs"
+                    ]
+                  },
+                  {
+                    "group": "File Types",
+                    "pages": [
+                      "guides/data-ingestion-and-sharing/files-documents-and-emails",
+                      "guides/data-ingestion-and-sharing/files-documents-and-emails-copied-1"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Data Share",
+                "pages": []
+              }
+            ]
           },
           {
             "group": "Flexor Installation",
@@ -56,6 +81,10 @@
             "pages": []
           }
         ]
+      },
+      {
+        "tab": "Snowflake",
+        "icon": "snowflake"
       }
     ]
   },

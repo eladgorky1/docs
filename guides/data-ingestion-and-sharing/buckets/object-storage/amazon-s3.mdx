@@ -1,0 +1,256 @@
+---
+title: "Amazon S3"
+---
+
+## Prerequisites
+
+### AWS
+
+- AWS IAM user or role with Administrator or IAM Full Access
+- AWS user or role with S3 Full Access permissions
+
+## Part 1: Setting Up Access to S3 Bucket
+
+### Overview
+
+This guide walks you through setting up an AWS S3 bucket that Flexor can access from Google Cloud Platform (GCP). The integration uses **Workload Identity Federation** - a secure, credential-free authentication method that allows Flexor's GCP service account to access your AWS resources without storing AWS access keys.
+
+### How Workload Identity Federation Works
+
+Traditional cross-cloud access requires storing AWS access keys in GCP, which creates security risks. Workload Identity Federation eliminates this by using a trust relationship and is considered industry standard:
+
+1. Flexor's GCP service account requests an identity token from Google.
+2. The service account presents this token to AWS STS (Security Token Service).
+3. AWS validates the token with Google and verifies the service account email matches the trust policy.
+4. AWS issues temporary credentials scoped to only the permissions you define.
+5. Flexor uses these temporary credentials to access your S3 bucket.
+
+**Benefits:** No long-lived credentials to manage or rotate, fine-grained access control, full AWS CloudTrail audit logging, and credentials automatically expire.
+
+### Prerequisites
+
+- AWS account with IAM administrative permissions
+- AWS CLI installed and configured
+- Bash terminal (macOS, Linux, or WSL on Windows)
+- Required IAM permissions: `s3:CreateBucket`, `iam:CreateRole`, `iam:CreatePolicy`, `iam:AttachRolePolicy`, `iam:GetRole`
+
+### Step 1: Create S3 Bucket
+
+You will create one standard S3 bucket in your preferred region:
+
+| Bucket Type | Bucket Name                                     | Purpose                        |
+| ----------- | ----------------------------------------------- | ------------------------------ |
+| Standard S3 | flexor-\<region\>-external-s3-\<customer_name\> | Data share - Customer → Flexor |
+
+Create bucket via AWS CLI:
+
+```bash
+# Set your preferred region
+export AWS_REGION="us-east-1"  # Change to your preferred region
+
+# Create standard S3 bucket
+# Note: For us-east-1, omit the --create-bucket-configuration flag
+aws s3api create-bucket \
+  --bucket flexor-${AWS_REGION}-external-s3-<customer_name> \
+  --region ${AWS_REGION}
+
+# For regions OTHER than us-east-1, use:
+aws s3api create-bucket \
+  --bucket flexor-${AWS_REGION}-external-s3-<customer_name> \
+  --region ${AWS_REGION} \
+  --create-bucket-configuration LocationConstraint=${AWS_REGION}
+```
+
+#### Get Bucket ARN
+
+After creating the bucket, note the ARN. The format is:
+
+- **Standard S3:** `arn:aws:s3:::flexor-<region>-external-s3-<customer_name>`
+
+### Step 2: Configure Trust and Access Policy
+
+Set the following environment variables in your terminal. Replace the placeholder with your actual bucket name:
+
+```bash
+export BUCKET_ARN="arn:aws:s3:::flexor-<region>-external-s3-<customer_name>"
+export GCP_SA_EMAIL="exec-prod-use1-aws-sa@flexorprod.iam.gserviceaccount.com"
+export AWS_REGION="us-east-1"  # Your chosen region
+```
+
+### Step 3: Trust Policy
+
+This policy allows Google's identity provider to assume the AWS role, but only for Flexor's specific service account:
+
+```bash
+cat > flexor-trust-policy.json << EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "accounts.google.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "accounts.google.com:email": "${GCP_SA_EMAIL}",
+          "accounts.google.com:aud": "sts.amazonaws.com"
+        }
+      }
+    }
+  ]
+}
+EOF
+```
+
+### Step 4: S3 Access Policy
+
+This policy grants the minimum required permissions for Flexor to read from your S3 bucket:
+
+```bash
+cat > flexor-s3-access-policy.json << EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "S3BucketAccess",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "${BUCKET_ARN}"
+      ]
+    },
+    {
+      "Sid": "S3ObjectAccess",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": [
+        "${BUCKET_ARN}/*"
+      ]
+    }
+  ]
+}
+EOF
+```
+
+#### Permission Details
+
+| Permission      | Purpose                      |
+| --------------- | ---------------------------- |
+| s3:ListBucket   | List objects in the bucket   |
+| s3:GetObject    | Read/download objects        |
+| s3:PutObject    | Write/upload objects         |
+| s3:DeleteObject | Remove objects (for cleanup) |
+
+### Step 5: Create IAM Role
+
+Create the IAM role that Flexor will assume:
+
+```bash
+aws iam create-role \
+  --role-name flexor-s3-access-role \
+  --assume-role-policy-document file://flexor-trust-policy.json \
+  --description "Role for Flexor to access S3 buckets" \
+  --tags Key=Environment,Value=production Key=ManagedBy,Value=flexor-workload-identity \
+  --region "${AWS_REGION}"
+
+# Retrieve and display the Role ARN
+ROLE_ARN=$(aws iam get-role --role-name flexor-s3-access-role --query 'Role.Arn' --output text)
+
+echo ""
+echo "============================================"
+echo "Role ARN (share this with Flexor):"
+echo "${ROLE_ARN}"
+echo "============================================"
+```
+
+### Step 6: Create and Attach Access Policy
+
+Create the S3 access policy and attach it to the role:
+
+```bash
+# Create the policy
+aws iam create-policy \
+  --policy-name flexor-s3-access-policy \
+  --policy-document file://flexor-s3-access-policy.json \
+  --description "S3 access policy for Flexor" \
+  --region "${AWS_REGION}"
+
+# Get the policy ARN
+POLICY_ARN=$(aws iam list-policies \
+  --query "Policies[?PolicyName=='flexor-s3-access-policy'].Arn" \
+  --output text)
+
+echo "Policy ARN: ${POLICY_ARN}"
+
+# Attach the policy to the role
+aws iam attach-role-policy \
+  --role-name flexor-s3-access-role \
+  --policy-arn "${POLICY_ARN}" \
+  --region "${AWS_REGION}"
+
+echo "Policy attached successfully."
+```
+
+### Step 7: Share Information with Flexor
+
+After completing the setup, provide Flexor with the following information:
+
+- **Role ARN:** The ARN output from Step 5 (format: `arn:aws:iam::ACCOUNT_ID:role/flexor-s3-access-role`)
+- **S3 Bucket Name:** `flexor-<region>-external-s3-<customer_name>`
+- **Region:** Your chosen AWS region
+
+---
+
+## Part 2: Folder & File Structure Requirements
+
+To ingest data into Flexor's recurring pipeline, please structure your files as follows:
+
+### 1. Organize data by namespace
+
+- Create a separate folder for each data namespace.
+- The folder name will determine the target Flexor table name.
+- _Example:_ Place SEC filing documents in a folder named `sec_filings`. This will map to a table named `sec_filings`.
+
+### 2. Create a timestamped folder on each write operation
+
+- Inside each namespace folder, create a subfolder for every batch of data using an ISO 8601 timestamp.
+- _Example:_ `sec_filings/timestamp=2024-07-17T15:30:00Z/...files`
+
+### 3. Use unique file names
+
+- **Flexor assumes file names are unique and are used as identifiers.**
+- Each file must have a unique file name.
+- This file name will be used as the `joinable_id` in your final Flexor table.
+- Our system uses this ID to deduplicate records (duplicates with the same `joinable_id` are dropped).
+
+### 4. Supported file formats
+
+Please ensure that files in each batch directory are in the following format:
+
+- **Document formats:** HTML
+
+### Example Structure
+
+```
+s3://flexor-us-east-1-external-s3-<customer_name>/
+└── sec_filings/
+    ├── timestamp=2024-07-17T15:30:00Z/
+    │   ├── filing_10k_2024_001.html
+    │   ├── filing_10q_2024_002.html
+    │   └── filing_8k_2024_003.html
+    ├── timestamp=2024-07-18T09:00:00Z/
+    │   ├── filing_10k_2024_004.html
+    │   └── filing_10q_2024_005.html
+    └── timestamp=2024-07-19T14:45:00Z/
+        ├── filing_8k_2024_006.html
+        ├── filing_10k_2024_007.html
+        └── filing_10q_2024_008.html
+```
