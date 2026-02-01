@@ -2,4 +2,146 @@
 title: "Flexor Installation"
 ---
 
-TBD
+# Azure Fabric Installation Guide
+
+This page describes how to install Flexor on Azure Fabric.
+
+## Prerequisites
+
+- Access to Azure Portal and Microsoft Fabric Workspace.
+- Flexor to provide: `flexor.zip` folder and Flexor API key.
+
+## Store API key in Azure Key Vault
+
+1. Go to your Azure Key Vault in the Azure Portal.
+2. Navigate to **Objects** \> **Secrets**.
+3. Click **Generate/Import**.
+4. Create a new secret:
+   - **Name:** `flexor-api-key` (must be this exact name)
+   - **Value:** The API key provided by Flexor
+5. Assign the **Key Vault Secrets User** role to users who will run Flexor functions.
+
+## Create a Lakehouse with a shortcut to the warehouse
+
+1. Go to your Fabric Workspace.
+2. Click **New Item**.
+
+<img
+  src="/images/image-3.png"
+  alt="Image"
+  title="Image"
+  className="mx-auto"
+  style={{ width:"34%" }}
+/>
+
+3. Find and select **Lakehouse**.
+
+<img
+  src="/images/image-4.png"
+  alt="Image"
+  title="Image"
+  className="mx-auto"
+  style={{ width:"45%" }}
+/>
+
+4. Create a new Lakehouse and select **Lakehouse schemas**.
+
+<img
+  src="/images/image-5.png"
+  alt="Image"
+  title="Image"
+  className="mx-auto"
+  style={{ width:"49%" }}
+/>
+
+5. Click the **...** next to `dbo` and select **New table Shortcut**.
+
+<img
+  src="/images/image-6.png"
+  alt="Image"
+  title="Image"
+  className="mx-auto"
+  style={{ width:"53%" }}
+/>
+
+6. Select **Microsoft OneLake**.
+
+<img
+  src="/images/image-7.png"
+  alt="Image"
+  title="Image"
+  className="mx-auto"
+  style={{ width:"55%" }}
+/>
+
+7. Select your Flexor mirrored database.
+
+<img
+  src="/images/image-8.png"
+  alt="Image"
+  title="Image"
+  className="mx-auto"
+  style={{ width:"57%" }}
+/>
+
+8. Select a single table (data namespace table).
+
+<Warning>
+  If you select multiple tables at once, the Lakehouse may fail to treat them as data. Select only one table at a time.
+</Warning>
+
+ 9. Click **Create**.
+10. Repeat steps 5-9 to add additional tables (all data namespaces and column tables).
+
+## Install Flexor functions
+
+1. Unzip the `flexor.zip` file provided by Flexor.
+2. In your Lakehouse, click the **...** next to **Files**.
+3. Select **Upload** \> **Upload Folder**.
+
+<img
+  src="/images/image-9.png"
+  alt="Image"
+  title="Image"
+  className="mx-auto"
+  style={{ width:"62%" }}
+/>
+
+4. Upload the `flexor` folder to Lakehouse Files.
+
+## Grant access to users
+
+1. Add the user to Azure AD.
+2. Go to Lakehouse settings and click **Share** at the bottom right corner.
+3. Assign the **Key Vault Secrets User** role in Azure Key Vault to the user.
+
+## Create a notebook
+
+1. Create a new notebook in your Fabric Workspace.
+
+<img
+  src="/images/image-10.png"
+  alt="Image"
+  title="Image"
+  className="mx-auto"
+  style={{ width:"60%" }}
+/>
+
+2. Add the Lakehouse as a data source for the notebook:
+   - Select **Existing Data Sources**
+   - Select your Lakehouse
+
+## Import the Flexor library
+
+Import the Flexor library at the beginning of each notebook session. Replace `<Azure Key Vault URL>` with your Key Vault URL (e.g., `https://yourkeyvault.vault.azure.net/`):
+
+```python
+import sys
+sys.path.append("/lakehouse/default/Files")
+import flexor
+flexor.init("<Azure Key Vault URL>")
+```
+
+<Info>
+  Run this initialization at the beginning of each notebook session.
+</Info>

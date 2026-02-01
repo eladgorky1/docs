@@ -11,7 +11,7 @@ To ingest data into Flexor's recurring pipeline, please structure your files as 
 - Create a separate folder for each data namespace.
 - The folder name will determine the target Flexor table name. Example: Place legal-related documents in a folder named `legal_documents`. This will map to the `legal_documents` table.
 
-### 2. Create a timestamped folder on each write operation
+### 2. Hive style partitioning
 
 - Inside each namespace folder, create a subfolder for each data batch using the daily ingestion timestamp (yyyy-MM-dd). Example: `legal_documents/timestamp=2024-07-17/...files`
 
