@@ -1,13 +1,16 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Flexor Documentation",
   "colors": {
     "primary": "#BA30FC",
     "light": "#D8BFFE",
     "dark": "#7C31DD"
   },
-  "favicon": "/favicon.svg",
+  "favicon": {
+    "light": "/images/flexor_Logo_Black_HORIZONTAL(1).svg",
+    "dark": "/images/flexor_Logo_White_HORIZONTAL(1).svg"
+  },
   "navigation": {
     "global": {
       "anchors": [
