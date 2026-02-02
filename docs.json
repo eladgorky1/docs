@@ -87,7 +87,10 @@
               "core-concepts/classification",
               "core-concepts/extraction",
               "core-concepts/coupled-extraction",
-              "core-concepts/cateogries"
+              "core-concepts/cateogries",
+              "core-concepts/transformation-types/evidence",
+              "core-concepts/transformation-types/contex",
+              "core-concepts/transformation-types/untitled-page"
             ]
           },
           {
