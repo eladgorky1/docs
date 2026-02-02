@@ -20,8 +20,8 @@
           {
             "anchor": "Data Types & Schemas",
             "color": {
-              "light": "#ffffff",
-              "dark": "#ffffff"
+              "light": "#ff0606",
+              "dark": "#ff0606"
             },
             "pages": [
               "guides/data-types-and-schemas/crm_notes",
