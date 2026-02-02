@@ -100,9 +100,9 @@
       {
         "tab": "Core Concepts",
         "icon": "lightbulb",
-        "groups": [
+        "anchors": [
           {
-            "group": "Transformation Types",
+            "anchor": "Transformation Types",
             "pages": [
               "core-concepts/classification",
               "core-concepts/extraction",
@@ -114,7 +114,7 @@
             ]
           },
           {
-            "group": "Functions",
+            "anchor": "Functions",
             "pages": [
               {
                 "group": "FLEX",
@@ -139,7 +139,7 @@
             ]
           },
           {
-            "group": "Tables",
+            "anchor": "Tables",
             "pages": [
               "core-concepts/tables/columns-table"
             ]
