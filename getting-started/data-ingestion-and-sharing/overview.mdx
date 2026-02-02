@@ -1,0 +1,53 @@
+---
+title: "Overview"
+---
+
+# Data Ingestion & Sharing
+
+Flexor supports multiple methods for ingesting your enterprise data. Choose the approach that best fits your infrastructure, security requirements, and existing workflows.
+
+## Cloud Storage (Bucket)
+
+Upload files to your cloud storage bucket, and Flexor securely ingests them using credential-free authentication via Workload Identity Federation.
+
+### Supported Object Storage
+
+Connect Flexor to your existing cloud storage provider:
+
+| Provider             | Description                     |
+| -------------------- | ------------------------------- |
+| Amazon S3            | AWS Simple Storage Service      |
+| Azure Blob Storage   | Microsoft Azure Blob containers |
+| Google Cloud Storage | GCP Cloud Storage buckets       |
+
+### File Types
+
+Flexor processes two categories of files from your bucket:
+
+| File Type          | Formats                                   | Use Case                                                |
+| ------------------ | ----------------------------------------- | ------------------------------------------------------- |
+| Tables             | Parquet                                   | Structured data exports (CRM notes, chats, transcripts) |
+| Documents & Emails | PDF, DOCX, EML, MSG, MBOX, PST, HTML, ZIP | Unstructured files and email archives                   |
+
+## Data Warehouse Sharing
+
+Share data directly from your data warehouse without file exports. Flexor connects to your DWH and processes data in place.
+
+### Data Share
+
+Native data sharing for real-time access without data movement:
+
+| Platform  | Status    | Description                          |
+| --------- | --------- | ------------------------------------ |
+| Snowflake | Available | Native Snowflake Secure Data Sharing |
+
+### Export to Bucket
+
+Export data from your warehouse to a Flexor-accessible bucket:
+
+| Platform        | Status      |
+| --------------- | ----------- |
+| Snowflake       | Coming soon |
+| Databricks      | Coming soon |
+| Google BigQuery | Coming soon |
+| Azure Fabric    | Coming soon |

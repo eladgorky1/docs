@@ -26,10 +26,11 @@
           {
             "anchor": "Data Types & Schemas",
             "color": {
-              "light": "#FF48FF",
-              "dark": "#FF48FF"
+              "light": "#",
+              "dark": "#"
             },
             "pages": [
+              "getting-started/data-types-and-schemas/overview",
               "guides/data-types-and-schemas/crm_notes",
               "guides/data-types-and-schemas/surveys-1",
               "guides/data-types-and-schemas/reviews",
@@ -42,10 +43,11 @@
           {
             "anchor": "Data Ingestion & Sharing",
             "color": {
-              "light": "#FF48FF",
-              "dark": "#FF48FF"
+              "light": "#",
+              "dark": "#"
             },
             "pages": [
+              "getting-started/data-ingestion-and-sharing/overview",
               {
                 "group": "Buckets",
                 "pages": [
