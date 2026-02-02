@@ -19,6 +19,10 @@
         "anchors": [
           {
             "anchor": "Overview",
+            "color": {
+              "light": "#BA30FC",
+              "dark": "#BA30FC"
+            },
             "pages": [
               "getting-started/overview/overview"
             ]
@@ -26,8 +30,8 @@
           {
             "anchor": "Data Types & Schemas",
             "color": {
-              "light": "#",
-              "dark": "#"
+              "light": "#BA30FC",
+              "dark": "#BA30FC"
             },
             "pages": [
               "getting-started/data-types-and-schemas/overview",
@@ -43,8 +47,8 @@
           {
             "anchor": "Data Ingestion & Sharing",
             "color": {
-              "light": "#",
-              "dark": "#"
+              "light": "#BA30FC",
+              "dark": "#BA30FC"
             },
             "pages": [
               "getting-started/data-ingestion-and-sharing/overview",
