@@ -19,6 +19,10 @@
         "anchors": [
           {
             "anchor": "Data Types & Schemas",
+            "color": {
+              "light": "#ffffff",
+              "dark": "#ffffff"
+            },
             "pages": [
               "guides/data-types-and-schemas/crm_notes",
               "guides/data-types-and-schemas/surveys-1",
