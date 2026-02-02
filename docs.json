@@ -18,10 +18,16 @@
         "icon": "upload",
         "anchors": [
           {
+            "anchor": "Overview",
+            "pages": [
+              "getting-started/overview/overview"
+            ]
+          },
+          {
             "anchor": "Data Types & Schemas",
             "color": {
-              "light": "#832f2f",
-              "dark": "#832f2f"
+              "light": "#FF48FF",
+              "dark": "#FF48FF"
             },
             "pages": [
               "guides/data-types-and-schemas/crm_notes",
@@ -35,6 +41,10 @@
           },
           {
             "anchor": "Data Ingestion & Sharing",
+            "color": {
+              "light": "#FF48FF",
+              "dark": "#FF48FF"
+            },
             "pages": [
               {
                 "group": "Buckets",
