@@ -6,14 +6,8 @@ Flexor integrates natively with Snowflake, enabling you to analyze all your unst
 
 ## How It Works
 
-Flexor runs directly inside your Snowflake environment. You query your data using familiar SQL syntax, and Flexor processes it in place—classifying text, extracting entities, and categorizing content at scale.
+Flexor runs directly inside your Snowflake environment. You query your data using familiar SQL syntax.
 
-```sql
-SELECT FLEX(message_id, 'Did the customer request a refund?') as flex
-FROM support_tickets
-```
-
-No data pipelines to build. No external API calls to manage. Your data stays in Snowflake, and Flexor delivers structured insights alongside your existing tables.
 
 ## Available Functions
 

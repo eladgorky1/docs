@@ -167,6 +167,7 @@
         "tab": "Databricks",
         "icon": "shutters",
         "pages": [
+          "databricks/overview",
           "databricks/flexor-installation",
           {
             "group": "Usage Examples",
@@ -182,7 +183,8 @@
       {
         "tab": "Google BigQuery",
         "icon": "magnifying-glass-chart",
-        "groups": [
+        "pages": [
+          "overview-1",
           {
             "group": "Usage Examples",
             "pages": [
@@ -198,6 +200,7 @@
         "tab": "Azure Fabric",
         "icon": "f",
         "pages": [
+          "azure-fabric/overview",
           "azure-fabric/flexor-installation",
           {
             "group": "Usage Examples",
