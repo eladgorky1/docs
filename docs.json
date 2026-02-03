@@ -45,26 +45,6 @@
             ]
           },
           {
-            "anchor": "Data Types & Schemas - OLD",
-            "color": {
-              "light": "#BA30FC",
-              "dark": "#BA30FC"
-            },
-            "hidden": true,
-            "pages": [
-              "getting-started/data-types-and-schemas/overview",
-              "guides/data-types-and-schemas/crm_notes",
-              "guides/data-types-and-schemas/surveys",
-              "guides/data-types-and-schemas/reviews",
-              "guides/data-types-and-schemas/transcripts1",
-              "guides/data-types-and-schemas/chats-1",
-              "guides/data-types-and-schemas/emails",
-              "guides/data-types-and-schemas/support_tickets",
-              "guides/data-types-and-schemas/surveys-1",
-              "guides/data-types-and-schemas/chats"
-            ]
-          },
-          {
             "anchor": "Data Ingestion and Sharing",
             "color": {
               "light": "#BA30FC",
