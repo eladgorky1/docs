@@ -35,13 +35,13 @@
             },
             "pages": [
               "overview",
-              "untitled-page",
               "crm-notes",
-              "untitled-page",
-              "untitled-page",
-              "untitled-page",
-              "untitled-page",
-              "untitled-page"
+              "surveys",
+              "reviews",
+              "transcripts",
+              "chats",
+              "emails",
+              "support-tickets"
             ]
           },
           {
