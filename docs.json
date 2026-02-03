@@ -28,7 +28,24 @@
             ]
           },
           {
-            "anchor": "Data Types & Schemas",
+            "anchor": "Data Types and Schemas",
+            "color": {
+              "light": "#BA30FC",
+              "dark": "#BA30FC"
+            },
+            "pages": [
+              "overview",
+              "crm-notes",
+              "untitled-page",
+              "untitled-page",
+              "untitled-page",
+              "untitled-page",
+              "untitled-page",
+              "untitled-page"
+            ]
+          },
+          {
+            "anchor": "Data Types & Schemas - OLD",
             "color": {
               "light": "#BA30FC",
               "dark": "#BA30FC"
@@ -47,7 +64,7 @@
             ]
           },
           {
-            "anchor": "Data Ingestion & Sharing",
+            "anchor": "Data Ingestion and Sharing",
             "color": {
               "light": "#BA30FC",
               "dark": "#BA30FC"
