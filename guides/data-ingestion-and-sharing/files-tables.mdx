@@ -1,0 +1,20 @@
+---
+title: "Tables"
+---
+
+## Folder & File Structure Requirements
+
+To ingest data into Flexor's recurring pipeline, please structure your files as follows:
+
+### 1. Organize data by namespace
+
+- Create a separate folder for each data namespace.
+- The folder name will determine the target Flexor table name. Example\_:\_ Place CRM notes data in a folder named `crm_notes`. This will map to the `crm_notes` table.
+
+### 2. Hive style partitioning
+
+- Inside each namespace folder, create a subfolder for each data batch using the daily ingestion timestamp (yyyy-MM-dd). `Example: crm_notes/timestamp=2024-07-17/...files`
+
+### 3. Supported file formats
+
+- Please ensure that the file in each batch directory is in **Parquet** format.

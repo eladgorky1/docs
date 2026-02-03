@@ -58,7 +58,7 @@
                   {
                     "group": "Object Storage",
                     "pages": [
-                      "guides/data-ingestion-and-sharing/buckets/object-storage/untitled-page",
+                      "guides/data-ingestion-and-sharing/buckets/object-storage/azure",
                       "guides/data-ingestion-and-sharing/buckets/object-storage/amazon-s3",
                       "guides/data-ingestion-and-sharing/buckets/object-storage/gcs"
                     ]
@@ -67,7 +67,7 @@
                     "group": "File Types",
                     "pages": [
                       "guides/data-ingestion-and-sharing/files-documents-and-emails",
-                      "guides/data-ingestion-and-sharing/files-documents-and-emails-copied-1"
+                      "guides/data-ingestion-and-sharing/files-tables"
                     ]
                   }
                 ]
@@ -109,8 +109,8 @@
               "core-concepts/coupled-extraction",
               "core-concepts/cateogries",
               "core-concepts/transformation-types/evidence",
-              "core-concepts/transformation-types/contex",
-              "core-concepts/transformation-types/untitled-page"
+              "core-concepts/transformation-types/context",
+              "core-concepts/transformation-types/domain_intelligence"
             ]
           },
           {
@@ -128,10 +128,10 @@
               {
                 "group": "FLEX_CREATE",
                 "pages": [
-                  "core-concepts/functions/flex/classification-copied-1",
-                  "core-concepts/functions/flex/extraction-copied-1",
-                  "core-concepts/functions/flex/coupled-extraction-copied-1",
-                  "core-concepts/functions/flex/categories-copied-1"
+                  "core-concepts/functions/flex_create/classification",
+                  "core-concepts/functions/flex_create/extraction",
+                  "core-concepts/functions/flex_create/coupled-extraction",
+                  "core-concepts/functions/flex_create/categories"
                 ]
               },
               "core-concepts/functions/flex-category-suggest",
@@ -170,9 +170,9 @@
           {
             "group": "Usage Examples",
             "pages": [
-              "snowflake/usage-examples-copied-1/flex",
-              "snowflake/usage-examples-copied-1/flex-create",
-              "snowflake/usage-examples-copied-1/flex-category-suggest",
+              "databricks/usage-examples/flex",
+              "databricks/usage-examples/flex_create",
+              "databricks/usage-examples/flex-category-suggest",
               "databricks/usage-examples/flex-archive"
             ]
           }
@@ -185,10 +185,10 @@
           {
             "group": "Usage Examples",
             "pages": [
-              "snowflake/usage-examples-copied-2/flex",
-              "snowflake/usage-examples-copied-2/flex-create",
-              "snowflake/usage-examples-copied-2/flex-category-suggest",
-              "google-big-query/usage-examples/flex-archive"
+              "bigquery/usage-examples/flex",
+              "bigquery/usage-examples/flex-create",
+              "bigquery/usage-examples/flex-category-suggest",
+              "bigquery/usage-examples/flex_archive"
             ]
           }
         ]
@@ -201,9 +201,9 @@
           {
             "group": "Usage Examples",
             "pages": [
-              "snowflake/usage-examples-copied-3/flex",
-              "snowflake/usage-examples-copied-3/flex-create",
-              "snowflake/usage-examples-copied-3/flex-category-suggest",
+              "azure-fabric/usage-examples/flex",
+              "azure-fabric/usage-examples/flex-create",
+              "azure-fabric/usage-examples/flex-category-suggest",
               "azure-fabric/usage-examples/flex-archive"
             ]
           }
