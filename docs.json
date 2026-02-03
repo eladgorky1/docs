@@ -159,8 +159,8 @@
             "pages": [
               "snowflake/usage-examples/flex",
               "snowflake/usage-examples/flex-create",
-              "snowflake/usage-examples/untitled-page",
-              "snowflake/usage-examples/untitled-page-copied-1"
+              "snowflake/usage-examples/flex-category-suggest",
+              "snowflake/usage-examples/flex-archive"
             ]
           }
         ]
