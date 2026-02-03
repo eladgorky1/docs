@@ -152,6 +152,7 @@
         "tab": "Snowflake",
         "icon": "snowflake",
         "pages": [
+          "snowflake/overview",
           "snowflake/flexor-installation",
           {
             "group": "Usage Examples",
