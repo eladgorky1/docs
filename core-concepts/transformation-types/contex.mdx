@@ -2,3 +2,68 @@
 title: "Context"
 ---
 
+Context is the surrounding information from a conversation or document that Flexor uses to understand the full meaning of each message or element.
+
+## Overview
+
+A single message or text element rarely tells the complete story. When a customer writes "Yes, I want to cancel," what are they canceling? When an email says "Please see the attached report," what does that report contain? The meaning lives in the surrounding context - previous messages, earlier paragraphs, attachments, and the flow of the conversation.
+
+Flexor automatically captures and applies the relevant context needed to understand each piece of text, ensuring that every transforamtion reflects the true meaning - not just the words in isolation.
+
+## Why Context Matters
+
+Without context, AI interprets text in a vacuum and makes mistakes:
+
+| Message in Isolation     | What It Seems to Mean  | What It Actually Means (with Context)                            |
+| :----------------------- | :--------------------- | :--------------------------------------------------------------- |
+| "Yes, go ahead"          | Agreement to something | Approval to process a refund (from previous messages)            |
+| "Can you send it again?" | Resend request         | Asking for a revised version of a proposal discussed earlier     |
+| "The numbers look off"   | Vague concern          | Specific issue with Q3 projections mentioned in the attached PDF |
+
+Context transforms ambiguous statements into precise, actionable insights.
+
+## The Problem with Single Messages or Elements
+
+Analyzing individual messages or document sections without context creates significant issues:
+
+**Lost References** Messages often refer to things mentioned earlier. "It" and "that" and "the issue" only make sense when you know what came before.
+
+**Missing Intent** A customer's true intent often builds across multiple exchanges. The final message might be a simple "Yes" - but understanding what they're agreeing to requires the full conversation.
+
+**Incomplete Understanding** Documents reference other sections, attachments, and prior communications. A paragraph in isolation may be meaningless without the preceding context.
+
+**False Classifications** Without context, a message like "I'm done" could be classified as frustration when it actually means task completion. Context reveals the difference.
+
+## The Problem with Full Conversations or Documents
+
+If single elements lack context, why not just process entire conversations or documents? Because even the largest language models have limits:
+
+**Token Limits** LLMs have finite context windows. A lengthy email thread, a multi-hundred-page document, or months of chat history simply won't fit - even in models with large context windows.
+
+**Signal Dilution** When you include everything, the relevant information gets buried. The critical context for understanding one message might be 3 exchanges back, not spread across 500 messages.
+
+**Processing Costs** Larger inputs mean higher latency and compute costs. Processing entire documents for every query is inefficient and expensive at scale.
+
+**Accuracy Degradation** Research shows that LLM accuracy decreases as context length increases. Important details in the middle of long inputs are often missed or weighted incorrectly.
+
+## Examples
+
+**Conversational Data (Support Chat)**
+
+```
+Customer: I placed an order yesterday
+Agent: I can see order #4521 for the Pro subscription. How can I help?
+Customer: I need to cancel it
+```
+
+Without context, "I need to cancel it" is ambiguous. With context, Flexor knows "it" refers to order #4521 for the Pro subscription.
+
+**Documents**
+
+```
+Section 1: This agreement covers Services as defined in Exhibit A
+...
+Section 7: Termination of Services requires 30-day notice
+```
+
+Without context, "Services" in Section 7 is generic. With context, Flexor knows it refers to the specific services defined in Exhibit A.

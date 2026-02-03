@@ -1,3 +1,72 @@
 ---
 title: "Domain Intelligence"
 ---
+
+# Domain Intelligence
+
+Domain Intelligence is Flexor's understanding of your organization's unique business language - the terminology, entities, and context that make your data meaningful.
+
+## Overview
+
+Every organization has its own language: product names, internal acronyms, industry jargon, competitor references, and business-specific terms that carry meaning only within your context. General AI models don't understand this language - they lack awareness of what "Project Aurora" means at your company, that "Bridge" is your integration feature, or that "USD" might mean a file format rather than currency in your industry.
+
+Domain Intelligence bridges this gap. Flexor automatically learns and applies your unique business vocabulary to improve the quality of every transformation - ensuring that all the Flexor and your AI results reflect what terms actually mean in your world.
+
+## Why Domain Intelligence Matters
+
+Without domain context, AI makes mistakes:
+
+| Scenario                               | Without Domain Intelligence      | With Domain Intelligence                            |
+| -------------------------------------- | -------------------------------- | --------------------------------------------------- |
+| Customer mentions "NexGen"             | Generic text, no special meaning | Recognized as an integration partner                |
+| Support ticket says "issue with Pulse" | Unknown term                     | Understood as a feature                             |
+| Sales note says "lost to Acme Corp"    | Company name extracted           | Identified as a competitor                          |
+| Agent writes "escalate to Tiger Team"  | Confusing, unknown reference     | Understood as your critical incident response group |
+
+Domain Intelligence transforms ambiguous text into precise, business-aware insights.
+
+## What Domain Intelligence Includes
+
+Flexor builds a comprehensive understanding of your business language as:
+
+**Business Relationship Entities** Organizations and individuals with specific relationships to your company - customers, competitors, partners, vendors, and integration products. Understanding these relationships changes how Flexor interprets mentions in your data.
+
+**Products & Features** Your product names, feature names, and internal brand names. These terms carry a specific meaning that generic models miss.
+
+**Organizational Terms** Team names, department names, internal process names, and role-specific terminology unique to your company structure.
+
+**Industry-Specific Terms** Terminology with specialized meaning in your industry. "Queen" means something specific in the mattress industry. "USD" can be a file format in 3D software. Flexor learns these distinctions.
+
+**Acronyms & Aliases** Internal abbreviations, shorthand, and alternative names that your teams use daily but wouldn't appear in any external dictionary.
+
+## How Domain Intelligence Works
+
+Flexor builds your Domain Intelligence from multiple sources:
+
+| Source                     | Description                                                                                          |
+| -------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **Your unstructured data** | Flexor analyzes your processed unstructured data to discover domain terms in context                 |
+| **Company websites**       | Your website and product pages provide official terminology                                          |
+| **Customer documentation** | Internal guides, knowledge bases, and training materials contain business-specific language _(Soon)_ |
+| **Manual additions**       | Add terms that don't appear in your data but are critical to your business                           |
+
+Domain Intelligence is maintained per data namespace, so different business units or product lines can have distinct terminology that reflects their specific context.
+
+## Example
+
+A technology company uses Flexor to analyze support tickets. Their Domain Intelligence includes:
+
+| Term         | Type        | Definition                             | Synonyms                      |
+| ------------ | ----------- | -------------------------------------- | ----------------------------- |
+| CloudSync    | Product     | Real-time data synchronization product | CS, Cloud Sync, the sync tool |
+| Databricks   | Integration | Supported data platform integration    | DBX                           |
+| Snowflake    | Integration | Supported data warehouse integration   | SF, Snowflake DWH             |
+| DataFlow Inc | Competitor  | Competing ETL platform                 | DataFlow, DFI                 |
+
+When a support ticket says "Customer wants to connect CS to SF but is considering switching to DataFlow," Flexor understands:
+
+- "CS" → CloudSync (their product)
+- "SF" → Snowflake (an integration)
+- "DataFlow" → DataFlow Inc (a competitor)
+
+This domain context enables accurate reasoning of what the customer actually means, turning ambiguous abbreviations and product names into precise, actionable outputs.
