@@ -35,8 +35,8 @@
             },
             "pages": [
               "overview",
-              "crm-notes",
               "untitled-page",
+              "crm-notes",
               "untitled-page",
               "untitled-page",
               "untitled-page",
@@ -50,6 +50,7 @@
               "light": "#BA30FC",
               "dark": "#BA30FC"
             },
+            "hidden": true,
             "pages": [
               "getting-started/data-types-and-schemas/overview",
               "guides/data-types-and-schemas/crm_notes",
