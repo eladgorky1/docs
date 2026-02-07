@@ -107,10 +107,22 @@
               "core-concepts/classification",
               "core-concepts/extraction",
               "core-concepts/coupled-extraction",
-              "core-concepts/cateogries",
-              "core-concepts/transformation-types/evidence",
+              "core-concepts/cateogries"
+            ]
+          },
+          {
+            "anchor": "Unstructured Data Understanding",
+            "pages": [
               "core-concepts/transformation-types/context",
               "core-concepts/transformation-types/domain_intelligence"
+            ]
+          },
+          {
+            "anchor": "Output",
+            "pages": [
+              "core-concepts/transformation-types/evidence",
+              "core-concepts/transformation-types/consistency",
+              "core-concepts/transformation-types/extraction-normaliztion"
             ]
           }
         ]
