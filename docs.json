@@ -129,6 +129,7 @@
       },
       {
         "tab": "Features",
+        "icon": "star",
         "anchors": [
           {
             "anchor": "Functions",
