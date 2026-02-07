@@ -112,7 +112,12 @@
               "core-concepts/transformation-types/context",
               "core-concepts/transformation-types/domain_intelligence"
             ]
-          },
+          }
+        ]
+      },
+      {
+        "tab": "Features",
+        "anchors": [
           {
             "anchor": "Functions",
             "pages": [
@@ -142,6 +147,13 @@
             "anchor": "Tables",
             "pages": [
               "core-concepts/tables/columns-table"
+            ]
+          },
+          {
+            "anchor": "Tools",
+            "hidden": true,
+            "pages": [
+              "compari-flex"
             ]
           }
         ]
