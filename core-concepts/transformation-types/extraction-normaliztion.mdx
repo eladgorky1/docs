@@ -1,5 +1,115 @@
 ---
 title: "Extraction Normaliztion"
-hidden: true
 ---
 
+Normalization transforms extracted values into standardized, analysis-ready formats - so you can work with your data immediately, without post-processing.
+
+## Overview
+
+When you extract information from unstructured text, the same concept can appear in countless variations: "1k" vs "1,000", "next Tuesday" vs "2024-03-12", "wifi" vs "Wi-Fi" vs "WIFI", "USA" vs "United States" vs "US". These variations make analysis difficult - grouping, filtering, and aggregating become unreliable.
+
+Flexor automatically normalizes extracted values into consistent, standardized formats. Numbers become true numerics. Dates become timestamps. Entities consolidate into canonical forms. The result is data you can analyze immediately, without cleaning or transformation.
+
+## Why Normalization Matters
+
+Without normalization, extracted data requires extensive post-processing:
+
+| Raw Extraction                                | Problem                                            |
+| --------------------------------------------- | -------------------------------------------------- |
+| "1k", "1,000", "1000", "one thousand"         | Can't aggregate or compare numerically             |
+| "next week", "March 15th", "3/15"             | Can't sort chronologically or filter by date range |
+| "wifi", "Wi-Fi", "WIFI", "wi fi"              | Same entity appears as multiple distinct values    |
+| "US", "USA", "United States"                  | Country analysis produces fragmented results       |
+| "\$50", "50 dollars", "50 USD", "fifty bucks" | Can't perform financial calculations               |
+
+Normalization eliminates these issues. Extract once, analyze immediately.
+
+## Types of Normalization
+
+### Number Normalization
+
+Flexor converts all numeric expressions into standard float values, regardless of how they appear in the text.
+
+| Raw Text    | Normalized Value |
+| ----------- | ---------------- |
+| "1k"        | `1000.0`         |
+| "100k"      | `100000.0`       |
+| "2.5m"      | `2500000.0`      |
+| "1B"        | `1000000000.0`   |
+| "2,000"     | `2000.0`         |
+| "fifteen"   | `15.0`           |
+| "a hundred" | `100.0`          |
+
+Percentages are preserved with consistent formatting:
+
+| Raw Text     | Normalized Value |
+| ------------ | ---------------- |
+| "10%"        | `10.00%`         |
+| "0.23%"      | `0.23%`          |
+| "15.788%"    | `15.79%`         |
+| "17 percent" | `17.00%`         |
+
+### Date & Time Normalization
+
+Flexor converts date and time expressions into a standardized timestamp format, using the record's metadata to resolve relative references.
+
+**Explicit dates** are parsed into timestamps:
+
+| Raw Text         | Normalized Value          |
+| ---------------- | ------------------------- |
+| "June 16th"      | `2024-06-16 00:00:00 UTC` |
+| "March 15, 2024" | `2024-03-15 00:00:00 UTC` |
+| "3/15/24"        | `2024-03-15 00:00:00 UTC` |
+
+**Relative dates** are resolved using the record's timestamp:
+
+| Raw Text          | Record Timestamp | Normalized Value          |
+| ----------------- | ---------------- | ------------------------- |
+| "yesterday"       | 2024-03-15       | `2024-03-14 00:00:00 UTC` |
+| "last Sunday"     | 2024-03-16       | `2024-03-10 00:00:00 UTC` |
+| "two days ago"    | 2024-03-15       | `2024-03-13 00:00:00 UTC` |
+| "end of December" | 2024-11-15       | `2024-12-31 00:00:00 UTC` |
+
+### Entity Normalization
+
+Flexor consolidates variations of the same entity into a single canonical form—handling capitalization, spacing, abbreviations, and common variations.
+
+| Raw Variations                                 | Normalized Value  |
+| ---------------------------------------------- | ----------------- |
+| "wifi", "Wi-Fi", "WIFI", "wi fi", "WiFi"       | `wifi`            |
+| "AC", "ac", "A/C", "air conditioner", "aircon" | `air conditioner` |
+| "G Suite", "G-Suite", "g suite"                | `g-suite`         |
+| "center", "centre", "Center"                   | `center`          |
+
+### Country Normalization
+
+Flexor normalizes country references to ISO 3166-1 standard codes, regardless of how they appear in the text.
+
+| Raw Text                                           | Normalized Value                                       |
+| -------------------------------------------------- | ------------------------------------------------------ |
+| "United States", "USA", "US", "U.S.A."             | `United States of America`                             |
+| "United Kingdom", "UK", "Britain", "Great Britain" | `United Kingdom of Great Britain and Northern Ireland` |
+| "Deutschland", "Germany"                           | `Germany`                                              |
+
+### Unit Normalization
+
+Flexor separates numeric values from their units and normalizes both, making quantitative analysis straightforward.
+
+| Raw Text      | Normalized Value |
+| ------------- | ---------------- |
+| "5 kg"        | `5.0 kg`         |
+| "\$100"       | `100.0 usd`      |
+| "fifty bucks" | `50.0 usd`       |
+| "€75"         | `75.0 eur`       |
+| "40 minutes"  | `40.0 minutes`   |
+
+## Evidence Preservation
+
+Normalization transforms the `answer` field, but the original text is always preserved in the `evidence` field. You get the best of both worlds: standardized values for analysis and the raw source text for verification.
+
+```json
+{
+  "answer": "2024-06-16 00:00:00 UTC",
+  "evidence": "Can I schedule delivery after June 16th?"
+}
+```

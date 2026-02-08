@@ -1,4 +1,49 @@
 ---
 title: "Consistency"
-hidden: true
 ---
+
+Consistency means Flexor delivers the same answer every time - across queries, functions, and transformation types.
+
+## Overview
+
+When you query your data with Flexor, you need to trust that the answer is reliable and repeatable. Running the same query twice should return the same result. A column created with FLEX_CREATE should match what you validated with FLEX. And related transformations should align logically - if nothing was extracted, no category should be assigned.
+
+Flexor ensures consistency at every level, so you can build reports, dashboards, and workflows with confidence.
+
+## Why Consistency Matters
+
+Inconsistent AI outputs create serious problems:
+
+- **Unreliable reporting** — Results change between runs, eroding trust in your data
+- **Failed validation** — What you tested in development doesn't match production
+- **Contradictory results** — One transformation says "yes" while a related one says "no"
+- **Wasted time** — Teams spend hours investigating discrepancies instead of acting on insights
+
+Consistency eliminates these issues. When Flexor gives you an answer, you can count on it.
+
+## Consistency Across Queries
+
+Run the same input on the same data point, get the same answer—every time.
+
+| First Query                                          | Second Query               | Result        |
+| :--------------------------------------------------- | :------------------------- | :------------ |
+| "Did the customer request a refund?" on Message #123 | Same query on Message #123 | ✓ Same answer |
+
+## Consistency Across Functions
+
+Results from FLEX match results from FLEX_CREATE.
+
+When you explore your data with FLEX and then deploy a persistent column with FLEX_CREATE, the outputs align. What you validated during testing is exactly what runs in production.
+
+| FLEX (Ad-hoc)               | FLEX_CREATE (Persistent)    | Result       |
+| :-------------------------- | :-------------------------- | :----------- |
+| Classification: `True`      | Classification: `True`      | ✓ Consistent |
+| Extraction: `["Product A"]` | Extraction: `["Product A"]` | ✓ Consistent |
+
+No surprises when you move from exploration to deployment.
+
+## Consistency Across Transformations
+
+Related transformations produce logically aligned results.
+
+Flexor ensures that classification, extraction, coupled-extraction, and categories work together coherently.
