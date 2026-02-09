@@ -111,18 +111,23 @@
             ]
           },
           {
-            "anchor": "Unstructured Data Understanding",
+            "anchor": "Unstructured Context",
             "pages": [
               "core-concepts/transformation-types/context",
               "core-concepts/transformation-types/domain_intelligence"
             ]
           },
           {
-            "anchor": "Output",
+            "anchor": "Structured Outputs",
+            "pages": [
+              "core-concepts/transformation-types/extraction-normaliztion"
+            ]
+          },
+          {
+            "anchor": "Reliability",
             "pages": [
               "core-concepts/transformation-types/evidence",
-              "core-concepts/transformation-types/consistency",
-              "core-concepts/transformation-types/extraction-normaliztion"
+              "core-concepts/transformation-types/consistency"
             ]
           }
         ]
