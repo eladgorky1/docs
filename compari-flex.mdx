@@ -1,4 +1,240 @@
 ---
-title: 'CompariFlex'
+title: "CompariFlex"
 ---
 
+# Validation & Quality Assurance Tool
+
+## Overview
+
+### What is Compariflex?
+
+Compariflex is Flexor's built-in validation tool that allows you to compare Flexor's automated results against your own expert tagging. Think of it as a quality assurance layer that helps you verify Flexor's accuracy and build confidence in your data transformations.
+
+Compariflex works exclusively with columns created using the `FLEX_CREATE` function, allowing you to validate classifications, extractions, and categorizations at the record level.
+
+### Why use Compariflex?
+
+When you're processing unstructured data at scale and integrate the processed data to your analytical tools, trust in your results is essential. Compariflex helps you:
+
+- **Validate accuracy**: Directly compare Flexor's automated outputs against your ground truth
+- **Build confidence**: Gain quantifiable metrics on Flexor's performance for your specific use case
+- **Identify patterns**: Spot where Flexor excels and where adjustments might be needed
+- **Document decisions**: Leave notes and context for your team on specific records
+- **Track progress**: Monitor precision metrics as you validate more records
+
+This tool is especially valuable for new implementations, when onboarding new data sources, or when fine-tuning your transformation logic.
+
+### When to use Compariflex?
+
+Compariflex is most useful in these scenarios:
+
+- **Initial deployment**: When first implementing Flexor transformations and need to establish baseline accuracy
+- **New use cases**: Testing Flexor on a new classification, extraction, or categorization task
+- **Quality audits**: Periodic checks to ensure continued accuracy as your data evolves
+- **Troubleshooting**: Investigating unexpected results or edge cases
+- **Stakeholder confidence**: Demonstrating Flexor's reliability to business users or leadership
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+Before using Compariflex, ensure you have:
+
+- At least one table (namespace) with a `FLEX_CREATE` transformation applied
+- Appropriate access permissions to the namespace you want to validate
+
+### Accessing Compariflex
+
+https://viewer.flexorai.com/compariflex/annotation
+
+---
+
+## Step-by-Step Walkthrough
+
+### Step 1: Select Your Namespace
+
+Begin by selecting the namespace (table) that you want to validate. The dropdown will show all available namespaces where you've run `FLEX_CREATE` transformations.
+
+<img
+  src="/images/image-20.png"
+  alt="Image"
+  title="Image"
+  style={{ width:"55%" }}
+/>
+
+### Step 2: Choose a Column
+
+After selecting your namespace, choose the specific column you want to validate.
+
+<img
+  src="/images/image-21.png"
+  alt="Image"
+  title="Image"
+  style={{ width:"67%" }}
+/>
+
+### Step 3: Create or Select an Annotation Set
+
+You have two options:
+
+![Image](/images/image-22.png)
+
+**View an existing annotation set**: If you or your team has already begun validating this column, select the existing annotation set to continue where you left off.
+
+<img
+  src="/images/image-23.png"
+  alt="Image"
+  title="Image"
+  style={{ width:"71%" }}
+/>
+
+**Create a new annotation set**: Start fresh with a new validation effort. You'll be prompted to:
+
+- Name your annotation set (e.g., "Q1 2026 Validation" or "Customer Intent Classification - Round 1")
+- Add a description (optional but recommended for team context)
+
+<img
+  src="/images/image-24.png"
+  alt="Image"
+  title="Image"
+  style={{ width:"64%" }}
+/>
+
+Annotation sets allow you to organize multiple validation efforts on the same column, which is useful for tracking improvements over time or having different team members work independently.
+
+---
+
+## Using Compariflex
+
+### Understanding the Record View
+
+Once you've selected your annotation set, you'll see all records in a table format with these fields:
+
+![Image](/images/image-25.png)
+
+#### Conversation ID
+
+A unique identifier for the conversation that contains this message. You can quickly copy this ID using the small copy icon next to it, that is shown when hovering over the conversation ID.
+
+**Important to note**: Each record in the table represents a single message within a conversation. This means you'll often see the same Conversation ID appear multiple times across different rows—each time representing a different message from that same conversation. You can sort the messages based on conversation ID and then see all messages linked to the same conversation stacked together.
+
+#### Message Content
+
+The original unstructured text that Flexor analyzed. This is the source material from which Flexor generated its answer.
+
+#### Viewer Link
+
+Click this link to see the full conversation with Flexor's evidence highlighted. This is valuable for understanding _why_ Flexor arrived at its answer.
+
+The viewer shows:
+
+- The complete conversation
+- Visual highlighting of the specific text (evidence) that informed Flexor's decision
+- Surrounding context to help you evaluate the answer
+
+**Use case**: If you're uncertain whether Flexor's classification is correct or the evidence isn't clear enough and you need more context, the viewer helps you see the exact reasoning.
+
+#### Evidence
+
+The specific text snippet that Flexor used to generate its answer. This is the same content that appears highlighted in the Viewer Link.
+
+This field helps you quickly assess whether Flexor identified the right supporting information without opening the full viewer.
+
+#### Flexor Answer
+
+Flexor's automated output, which varies by transformation type:
+
+- **Classification**: `True` or `False`
+- **Extraction**: The extracted entity
+- **Categorization**: The assigned category
+
+### Validating Records
+
+#### Is Flexor Correct?
+
+This is where you provide your expert judgment. For each record, tag whether Flexor's answer is correct:
+
+- **Yes**: Flexor's answer matches your expected output
+- **No**: Flexor's answer is incorrect or incomplete
+
+**Changing your mind?** You can untag a record at any time by simply clicking the same button again (Yes or No). The button will deselect, and that record will no longer count toward your validation metrics.
+
+Your validation builds the dataset used to calculate precision metrics.
+
+**Best practice**: Be consistent in your validation criteria. If you're unsure, leave it untagged initially and discuss with your team to establish clear guidelines.
+
+#### Notes
+
+Use this free-text field to:
+
+- Explain why you marked something as incorrect
+- Flag edge cases or ambiguous records
+- Provide context for your team
+- Suggest potential improvements to the transformation logic
+
+---
+
+## Annotation Overview Panel
+
+<img
+  src="/images/image-27.png"
+  alt="Image"
+  title="Image"
+  style={{ width:"39%" }}
+/>
+
+### Dataset Overview
+
+**Data Namespace**: The table you're validating 
+
+**Annotation Set Name**: The name you assigned to this validation effort 
+
+**Description**: Any additional context you provided
+
+This section helps orient you, especially when switching between multiple annotation sets.
+
+### Metrics
+
+<img
+  src="/images/image-28.png"
+  alt="Image"
+  title="Image"
+  style={{ width:"38%" }}
+/>
+
+**Precision**: The percentage of Flexor's answers that you've validated as correct. This is calculated as:
+
+```
+Precision = (Correct answers / Total validated records) × 100
+```
+
+**Important**: You must validate a minimum of 20 records before precision metrics will be displayed. This ensures your precision calculation is based on a meaningful sample size.
+
+**Records Tagged**: Shows your progress, e.g., "45 / 500 records tagged"
+
+These metrics update in real-time as you validate more records, giving you a live view of Flexor's performance.
+
+### Input 
+
+<img
+  src="/images/image-29.png"
+  alt="Image"
+  title="Image"
+  style={{ width:"36%" }}
+/>
+
+**Column Name: **The FLEX_CREATE column you're validating
+
+**Type**: Whether this is a classification, extraction, or categorization task
+
+**Input**: The input you provided to `FLEX_CREATE`
+
+This reminds you of what you asked Flexor to do, which is essential context when evaluating whether answers are correct.
+
+---
+
+## FAQ & Troubleshooting
+
+\*\*Need help in filling this out- based on most frequently asked questions/ issues that recently arised in the tool and we can give users context for solving..
