@@ -107,27 +107,27 @@
               "core-concepts/classification",
               "core-concepts/extraction",
               "core-concepts/coupled-extraction",
-              "core-concepts/cateogries"
+              "core-concepts/categories"
             ]
           },
           {
             "anchor": "Unstructured Context",
             "pages": [
-              "core-concepts/transformation-types/context",
-              "core-concepts/transformation-types/domain_intelligence"
+              "core-concepts/unstructured-context/data-context",
+              "core-concepts/unstructured-context/domain_intelligence"
             ]
           },
           {
             "anchor": "Structured Outputs",
             "pages": [
-              "core-concepts/transformation-types/extraction-normaliztion"
+              "core-concepts/structured-outputs/structured-outputs"
             ]
           },
           {
             "anchor": "Reliability",
             "pages": [
-              "core-concepts/transformation-types/evidence",
-              "core-concepts/transformation-types/consistency"
+              "core-concepts/reliability/evidence",
+              "core-concepts/reliability/consistency"
             ]
           }
         ]
