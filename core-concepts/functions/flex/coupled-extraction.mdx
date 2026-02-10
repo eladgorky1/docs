@@ -11,18 +11,18 @@ FLEX(MESSAGE_ID/ELEMENT_ID/ENTRY_ID, '<boolean_input> -> <extraction_1> AS <name
 ```
 
 <Info>
-  MESSAGE_ID - For Conversational data (e.g., Chats, Transcripts, Emails)
+  message_id - For Conversational data (e.g., Chats, Transcripts, Emails)
 
-  ENTRY_ID - For Non-Conversational data (e.g, CRM Notes, Reviews)
+  entry_id - For Non-Conversational data (e.g, CRM Notes, Reviews)
 
-  ELEMENT_ID - For Documents
+  element_id - For Documents
 </Info>
 
 ## Parameters
 
 | Parameter                        | Description                                                   |
 | -------------------------------- | ------------------------------------------------------------- |
-| `MESSAGE_ID/ELEMENT_ID/ENTRY_ID` | The unique identifier for the row being processed.            |
+| `message_id/element_id/entry_id` | The unique identifier for the row being processed.            |
 | `coupled_extraction_input`       | A classification input followed by multiple extraction inputs |
 
 ## Example
@@ -49,5 +49,3 @@ A JSON object with the following properties:
   {"product": "Mouse", "complaint": "Not connecting"}
 ]
 ```
-
-## 
