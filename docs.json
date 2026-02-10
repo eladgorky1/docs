@@ -199,7 +199,7 @@
         "pages": [
           "databricks/overview",
           "databricks/flexor-installation",
-          "databricks/untitled-page",
+          "databricks/importing-flexor-functions",
           {
             "group": "Usage Examples",
             "pages": [
