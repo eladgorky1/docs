@@ -94,19 +94,8 @@ Run the following command from the admin's terminal, replacing `<user_email>` wi
 databricks secrets put-acl --scope flexor_secrets --principal <user_email> --permission READ
 ```
 
+Next Step
+
 ## Import the Flexor library
 
-Import the Flexor library at the beginning of each notebook session:
-
-```python
-import flexor
-flexor.init("flexor_secrets")
-```
-
-<Info>
-  Run this initialization in the following scenarios:
-
-  - First-time use in a new Databricks notebook.
-  - After restarting the Databricks cluster.
-  - When encountering `ModuleNotFoundError: No module named 'flexor'`.
-</Info>
+[**Importing Flexor Functions**](https://flexor.mintlify.io/databricks/importing-flexor-functions) documentation.
