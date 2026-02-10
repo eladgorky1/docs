@@ -1,0 +1,28 @@
+---
+title: "Importing Flexor Functions"
+---
+
+## Overview
+
+To integrate Flexor's SQL functions into Databricks, Flexor uses UDFs (user-defined functions). You must import the Flexor library each time you start working on a new Databricks notebook or after the cluster restarts. This ensures that the required dependencies and configurations are properly loaded.
+
+Once you import the Flexor library, all Flexor functions will be available for use.
+
+## Import Library
+
+Run the following command in a Python cell at the beginning of your notebook:
+
+```python
+import flexor
+flexor.init("flexor_secrets")
+```
+
+## When to Initialize
+
+You should execute this initialization step in the following scenarios:
+
+| Scenario                                | Description                                                                                              |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| **First-time use in a new notebook**    | Each new Databricks notebook session requires initialization                                             |
+| **After restarting the cluster**        | Cluster restarts clear loaded libraries, so reinitialization is necessary                                |
+| **When encountering dependency errors** | If you see `ModuleNotFoundError: No module named 'flexor'`, re-running the initialization may resolve it |
