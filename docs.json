@@ -256,12 +256,7 @@
         "label": "Support",
         "href": "mailto:help@flexor.com"
       }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
+    ]
   },
   "contextual": {
     "options": [
