@@ -6,6 +6,16 @@ Every Flexor transformation returns an `evidence` property alongside the `answer
 
 <u>Evidence</u> enables explainability - a core Flexor principle. Instead of black-box outputs, you can trace every answer back to the specific words in your data that led to that conclusion.
 
+## Why Evidence Matters
+
+**Auditability** Trace any insight back to its source. When a report or dashboard shows a number, you can trace exactly which messages contributed to that figure—and why.
+
+**Trust** Build confidence in AI outputs by showing the work. Stakeholders can validate that outputs are based on real content, not hallucinations.
+
+**Debugging** When results seem wrong, evidence reveals why. If the output doesn't match your intent, the evidence shows what text triggered that decision—helping you refine your input.
+
+**Compliance** Meet governance requirements by maintaining complete lineage from raw data to structured output. Every transformation is explainable and auditable.
+
 ## How Evidence Works
 
 When multiple values are returned for a single record (extractions, coupled-extractions, or categories), evidence appears in the same order as the answers, enabling direct matching between results and their source text.
@@ -55,13 +65,3 @@ Evidence format varies by transformation type:
   "evidence": ["I want a discount", "I need to return this"]
 }
 ```
-
-## Why Evidence Matters
-
-**Auditability** Trace any insight back to its source. When a report or dashboard shows a number, you can trace exactly which messages contributed to that figure—and why.
-
-**Trust** Build confidence in AI outputs by showing the work. Stakeholders can validate that outputs are based on real content, not hallucinations.
-
-**Debugging** When results seem wrong, evidence reveals why. If the output doesn't match your intent, the evidence shows what text triggered that decision—helping you refine your input.
-
-**Compliance** Meet governance requirements by maintaining complete lineage from raw data to structured output. Every transformation is explainable and auditable.
