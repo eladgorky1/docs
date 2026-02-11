@@ -149,13 +149,14 @@ Replace the following in the queries:
 - `<customer_name>` with **Customer Name** provided by Flexor
 - `<Flexor_user_role_name>` with the role you want to give privileges to use Flexor
 - `<data_namespace_table>` with dataset-specific table name - given by Flexor
+- `<id>` - message_id/entry_id/element_id - depends on the data type
 
 **Validate the environment:**
 
 ```sql
 USE ROLE <Flexor_user_role_name>;
 
-SELECT FLEX.<customer_name>.FLEX(flexor_id, 'Is it a text?')
-FROM <customer_name>.<customer_name>.FLEXOR_<data_namespace_table>
+SELECT FLEX.<customer_name>.FLEX(<id>, 'Is it a text?')
+FROM <customer_name>.<customer_name>.<data_namespace_table>
 LIMIT 10;
 ```
