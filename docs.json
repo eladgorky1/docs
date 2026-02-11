@@ -190,6 +190,14 @@
               "snowflake/usage-examples/flex-category-suggest",
               "snowflake/usage-examples/flex-archive"
             ]
+          },
+          {
+            "group": "Best Practices & How-Tos",
+            "pages": [
+              "querying-flexor",
+              "writing-optimal-inputs",
+              "building-complete-use-cases"
+            ]
           }
         ]
       },
