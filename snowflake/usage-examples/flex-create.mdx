@@ -56,5 +56,3 @@ FROM <table_name>,
 TABLE(FLATTEN(INPUT => <column_name>)) as flatten_column 
 WHERE ARRAY_SIZE(<column_name>) > 0  AND flatten_column.value != 'NA'
 ```
-
-## 
