@@ -23,7 +23,7 @@ CREATE OR REPLACE TEMP TABLE relevant_subset AS
     FROM ( 
 			-- USER: Refine this subset until you fit the 5,000 rows query limit
 			SELECT *
-	        FROM YOUR_DATASET_NAME
+	        FROM YOUR_DATASET_NAME -- USER: Insert the desired dataset
     	    WHERE timestamp >= '2026-01-01' -- USER: Filter relevant data
         	ORDER BY timestamp -- USER: Ensure correct ordering to minimize cuts (usually, by timestamp or ordering_index)
         )
