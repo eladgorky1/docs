@@ -89,7 +89,7 @@ CREATE DATABASE IF NOT EXISTS FLEX;
 CREATE SCHEMA IF NOT EXISTS FLEX.<customer_name>;
 
 -- Install functions 
-CREATE OR REPLACE SECURE EXTERNAL FUNCTION
+CREATE OR REPLACE EXTERNAL FUNCTION
 FLEX.<customer_name>.FLEX("FLEXOR_ID" VARCHAR(16777216), "USER_INPUT" VARCHAR(16777216))
   RETURNS VARIANT
   STRICT
@@ -98,7 +98,7 @@ FLEX.<customer_name>.FLEX("FLEXOR_ID" VARCHAR(16777216), "USER_INPUT" VARCHAR(16
   MAX_BATCH_ROWS = 20000
   AS 'https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev/binary-classification/snowflake-classify/flex/<customer_name>';
 
-CREATE OR REPLACE SECURE EXTERNAL FUNCTION
+CREATE OR REPLACE EXTERNAL FUNCTION
 FLEX.<customer_name>.FLEX_CREATE(user_input string, transformation_name string, data_namespace_name string)
   RETURNS VARIANT
   RETURNS NULL ON NULL INPUT
@@ -108,7 +108,7 @@ FLEX.<customer_name>.FLEX_CREATE(user_input string, transformation_name string, 
   MAX_BATCH_ROWS = 1
   AS 'https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev/binary-classification/snowflake-classify/create_flex/<customer_name>';
 
-CREATE OR REPLACE SECURE EXTERNAL FUNCTION
+CREATE OR REPLACE EXTERNAL FUNCTION
 FLEX.<customer_name>.FLEX_CATEGORY_SUGGEST(user_input STRING, subset_name STRING)
   RETURNS VARIANT
   RETURNS NULL ON NULL INPUT
@@ -119,7 +119,7 @@ FLEX.<customer_name>.FLEX_CATEGORY_SUGGEST(user_input STRING, subset_name STRING
   HEADERS = ('function' = 'category_suggestion')
   AS 'https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev/binary-classification/snowflake-classify/category_suggestion/<customer_name>';
 
-CREATE OR REPLACE SECURE EXTERNAL FUNCTION
+CREATE OR REPLACE EXTERNAL FUNCTION
 FLEX.<customer_name>.FLEX_ARCHIVE("TRANSFORMATION_NAME" VARCHAR, "DATA_NAMESPACE_NAME" VARCHAR)
   RETURNS VARIANT
   STRICT
