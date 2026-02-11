@@ -3,5 +3,53 @@ title: "Quick-start queries"
 ---
 
 <Note>
-  🚧 This section is still under construction 🚧 
+  🚧 This section is still under construction 🚧
 </Note>
+
+## Querying best-practices
+
+Usually, live FLEX querying is used for either **data exploration** or **input tuning** purposes. In the structured data space, the quickest and most efficient way to explore data and iterate on metrics calculations is **to compare experiments them against each other**. Working against a reference lets data practitioners quantify improvements, make trade-offs, and align the analysis with business purposes.\
+\
+In the unstructured data space, **we do that by running two parallel FLEX queries**. Differences between inputs pop up easily, and the iteration process becomes easy, reliable, and consistent - as results are always being compared instead of analyzed in the void.
+
+```sql lines
+USE SCHEMA FLEXOR.YOUR_ENVIRONMENT_NAME;
+
+CREATE OR REPLACE TEMP TABLE relevant_subset AS
+(   
+    SELECT        
+			*,        
+			CASE WHEN COUNT(*) OVER() > 5000 THEN 1/0 ELSE 1 END as row_check,
+    FROM ( 
+			-- USER: Refine this subset until you fit the 5,000 rows query limit
+			SELECT *
+	        FROM YOUR_DATASET_NAME
+    	    WHERE timestamp >= '2026-01-01' -- USER: Filter relevant data
+        	ORDER BY timestamp -- USER: Ensure correct ordering to minimize cuts (usually, by timestamp or ordering_index)
+        )
+);
+
+-- Using double-FLEX for quick comparisons
+
+SELECT 
+	-- USER: Use ENTRY_ID for Flexor-Document-Schema datasetes
+	-- USER: Use MESSAGE_ID for Flexor-Conversational-Schema datasetes 
+    ENTRY_ID, CONTENT, 
+    TRY_PARSE_JSON(column_1:answer) as answer_column_1,
+    TRY_PARSE_JSON(column_2:answer) as answer_column_2,
+    column_1:evidence as evidence_column_1,
+    column_2:evidence as evidence_column_2,
+    column_1:viewer::text as vw_fcolumn_1,
+    column_2:viewer::text as vw_fcolumn_2
+FROM (
+    SELECT 
+		-- USER: Use ENTRY_ID / MESSAGE_ID
+        ENTRY_ID, CONTENT,
+        FLEX(ENTRY_ID, 'Is there a name?') as column_1,
+        FLEX(ENTRY_ID, 'Is there a full name?') as column_2
+    FROM relevant_subset
+) 
+
+-- USER: View desired results. Typically, true / false / not like '%NA%'
+WHERE column_2 not like '%false%'; 
+```
