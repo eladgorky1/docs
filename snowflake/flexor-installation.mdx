@@ -54,8 +54,8 @@ describe integration flexor_integration;
 
 ### What will be done in your environment
 
-- Create two new databases from shares by Flexor - Training environment, and Customer environment
-- Creation of Flexor functions (, `FLEX_CREATE`, `FLEX_CATEGORY_SUGGEST`, `FLEX_ARCHIVE`)
+- Create a new databases from shares by Flexor
+- Creation of Flexor functions (`FLEX`, `FLEX_CREATE`, `FLEX_CATEGORY_SUGGEST`, `FLEX_ARCHIVE`)
 - Creation of a Warehouse (XS) to run Flexor with
 - Creation of Role(s) that can use the entire set of Flexor capabilities
 - Validating the entire integration works end to end
@@ -86,50 +86,9 @@ GRANT USAGE ON WAREHOUSE FLEXOR_WH TO ROLE <Flexor_user_role_name>;
 
 -- Creates database, schemas for installed sql functions
 CREATE DATABASE IF NOT EXISTS FLEX;
-CREATE SCHEMA IF NOT EXISTS FLEX.TRAINING_ENV;
 CREATE SCHEMA IF NOT EXISTS FLEX.<customer_name>;
 
--- Install functions - training environment
-CREATE OR REPLACE SECURE EXTERNAL FUNCTION
-FLEX.TRAINING_ENV.FLEX("FLEXOR_ID" VARCHAR(16777216), "USER_INPUT" VARCHAR(16777216))
-  RETURNS VARIANT
-  STRICT
-  API_INTEGRATION = "FLEXOR_INTEGRATION"
-  CONTEXT_HEADERS = (CURRENT_USER)
-  MAX_BATCH_ROWS = 20000
-  AS 'https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev/binary-classification/snowflake-classify/flex/training_env';
-
-CREATE OR REPLACE SECURE EXTERNAL FUNCTION
-FLEX.TRAINING_ENV.FLEX_CREATE(user_input string, transformation_name string, data_namespace_name string)
-  RETURNS VARIANT
-  RETURNS NULL ON NULL INPUT
-  VOLATILE
-  API_INTEGRATION = "FLEXOR_INTEGRATION"
-  CONTEXT_HEADERS = (CURRENT_USER)
-  MAX_BATCH_ROWS = 1
-  AS 'https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev/binary-classification/snowflake-classify/create_flex/training_env';
-
-CREATE OR REPLACE SECURE EXTERNAL FUNCTION
-FLEX.TRAINING_ENV.FLEX_CATEGORY_SUGGEST(user_input STRING, subset_name STRING)
-  RETURNS VARIANT
-  RETURNS NULL ON NULL INPUT
-  VOLATILE
-  API_INTEGRATION = flexor_integration
-  MAX_BATCH_ROWS = 1
-  CONTEXT_HEADERS = (CURRENT_USER)
-  HEADERS = ('function' = 'category_suggestion')
-  AS 'https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev/binary-classification/snowflake-classify/category_suggestion/training_env';
-
-CREATE OR REPLACE SECURE EXTERNAL FUNCTION
-FLEX.TRAINING_ENV.FLEX_ARCHIVE("TRANSFORMATION_NAME" VARCHAR, "DATA_NAMESPACE_NAME" VARCHAR)
-  RETURNS VARIANT
-  STRICT
-  API_INTEGRATION = "FLEXOR_INTEGRATION"
-  CONTEXT_HEADERS = (CURRENT_USER)
-  MAX_BATCH_ROWS = 1
-  AS 'https://flexor-sql-handler-production-api-er3kqsx.ew.gateway.dev/binary-classification/snowflake-classify/archive_column/training_env';
-
--- Install functions - customer environment
+-- Install functions 
 CREATE OR REPLACE SECURE EXTERNAL FUNCTION
 FLEX.<customer_name>.FLEX("FLEXOR_ID" VARCHAR(16777216), "USER_INPUT" VARCHAR(16777216))
   RETURNS VARIANT
@@ -174,15 +133,12 @@ GRANT USAGE ON DATABASE FLEX TO ROLE <Flexor_user_role_name>;
 GRANT USAGE ON ALL SCHEMAS IN DATABASE FLEX TO ROLE <Flexor_user_role_name>;
 GRANT USAGE ON ALL FUNCTIONS IN DATABASE FLEX TO ROLE <Flexor_user_role_name>;
 
--- Creates databases from flexor return share
-CREATE DATABASE TRAINING_ENV
-  FROM SHARE <flexor_account>.FLEXOR_SHARE_TRAINING_ENV;
+-- Creates database from flexor return share
 
 CREATE DATABASE <customer_name>
   FROM SHARE <flexor_account>.FLEXOR_SHARE_<customer_name>;
 
 -- Grant roles to use the shared data
-GRANT IMPORTED PRIVILEGES ON DATABASE TRAINING_ENV TO ROLE <Flexor_user_role_name>;
 GRANT IMPORTED PRIVILEGES ON DATABASE <customer_name> TO ROLE <Flexor_user_role_name>;
 ```
 
@@ -194,17 +150,7 @@ Replace the following in the queries:
 - `<Flexor_user_role_name>` with the role you want to give privileges to use Flexor
 - `<data_namespace_table>` with dataset-specific table name - given by Flexor
 
-**Validate the training environment:**
-
-```sql
-USE ROLE <Flexor_user_role_name>;
-
-SELECT FLEX.TRAINING_ENV.FLEX(flexor_id, 'Did the customer mention that the apartment was dirty?')
-FROM FLEXOR_TRAINING.TRAINING_ENV.FLEXOR_REVIEWS_TRAINING
-LIMIT 10;
-```
-
-**Validate the customer data environment:**
+**Validate the environment:**
 
 ```sql
 USE ROLE <Flexor_user_role_name>;
