@@ -8,9 +8,9 @@ title: "Quick-start queries"
 
 ## Querying best-practices
 
-Usually, live FLEX querying is used for either **data exploration** or **input tuning** purposes. In the structured data space, the quickest and most efficient way to explore data and iterate on metrics calculations is **to compare experiments them against each other**. Working against a reference lets data practitioners quantify improvements, make trade-offs, and align the analysis with business purposes.\
+Live FLEX querying is typically used for **data exploration** or **input tuning**. In the structured data space, the most efficient way to explore data and iterate on metric calculations is **to compare experiments against each other**. Working against a reference lets data practitioners quantify improvements, make trade-offs, and align the analysis with business objectives.\
 \
-In the unstructured data space, **we do that by running two parallel FLEX queries**. Differences between inputs pop up easily, and the iteration process becomes easy, reliable, and consistent - as results are always being compared instead of analyzed in the void.
+In the unstructured data space, **we do this by running two parallel FLEX queries**. Differences between inputs surface immediately, and the iteration process becomes easy, reliable, and consistent - results are always compared against a reference rather than analyzed in isolation.
 
 ```sql lines
 USE SCHEMA FLEXOR.YOUR_ENVIRONMENT_NAME;
@@ -44,9 +44,9 @@ SELECT
 FROM (
     SELECT 
 		-- USER: Use ENTRY_ID / MESSAGE_ID
-        ENTRY_ID, CONTENT,
         FLEX(ENTRY_ID, 'Is there a name?') as column_1,
-        FLEX(ENTRY_ID, 'Is there a full name?') as column_2
+        FLEX(ENTRY_ID, 'Is there a full name?') as column_2,
+		*
     FROM relevant_subset
 ) 
 
