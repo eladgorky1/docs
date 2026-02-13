@@ -1,0 +1,56 @@
+---
+title: "Quick-start queries"
+---
+
+<Note>
+  🚧 This section is still under construction 🚧
+</Note>
+
+## Querying best-practices
+
+Live FLEX querying is typically used for **data exploration** or **input tuning**. In the structured data space, the most efficient way to explore data and iterate on metric calculations is **to compare experiments against each other**. Working against a reference lets data practitioners quantify improvements, make trade-offs, and align the analysis with business objectives.\
+\
+In the unstructured data space, **we do this by running two parallel FLEX queries**. Differences between inputs surface immediately, and the iteration process becomes easy, reliable, and consistent - results are always compared against a reference rather than analyzed in isolation.
+
+```python
+import flexor
+flexor.init("flexor_secrets")
+```
+
+```sql lines
+%sql
+
+WITH relevant_subset AS (
+	-- USER: Refine this subset until you fit the 5,000 rows query limit
+    SELECT *
+    FROM YOUR_ENRIVONMENT_NAME.default.YOUR_DATASET_NAME
+),
+
+-- Using double-FLEX for quick comparisons
+
+flex_column_1 AS (
+    SELECT result.*
+    FROM relevant_subset
+    CROSS JOIN LATERAL FLEX(entry_id, 'is there a name?') AS result
+),
+
+flex_column_2 AS (
+    SELECT result.*
+    FROM relevant_subset
+    CROSS JOIN LATERAL FLEX(entry_id, 'does it mention a city?') AS result
+)
+
+SELECT
+    relevant_subset.*,
+	flex_column_1.answer AS answer_1,
+    flex_column_2.answer AS answer_2,
+	flex_column_1.evidence AS evidence_1,
+    flex_column_2.evidence AS evidence_2
+
+FROM subset
+JOIN flex_column_1 ON flex_column_1.flexor_id = relevant_subset.entry_id
+JOIN flex_column_2 ON flex_column_2.flexor_id = relevant_subset.entry_id
+
+-- USER: View desired results. Typically, true / false / not like '%NA%'
+WHERE answer_1 like 'true'
+```

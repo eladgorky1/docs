@@ -216,6 +216,14 @@
               "databricks/usage-examples/flex-category-suggest",
               "databricks/usage-examples/flex-archive"
             ]
+          },
+          {
+            "group": "Best Practices & How-Tos",
+            "pages": [
+              "querying-flexor-copied-1",
+              "writing-optimal-inputs-copied-1",
+              "building-complete-use-cases-copied-1"
+            ]
           }
         ]
       },

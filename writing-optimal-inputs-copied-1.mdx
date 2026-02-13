@@ -1,0 +1,30 @@
+---
+title: "Writing optimal inputs"
+---
+
+<Note>
+  🚧 This section is still under construction 🚧
+</Note>
+
+## Straightfoward is the new optimal
+
+Working with unstructured data is a new discipline to many. In contrast to structured fields such as numbers and dates, the same unstructured data point can be interpreted in many different ways.
+
+**Flexor ACE's structuring engine** was designed with core principles that ensure a steerable, reliable, and consistent output - on any data type, and any use case:
+
+- **Explicit interpretation** - if you typed it, you mean it\
+  \
+  The engine pays attention to details you type in order to provide you with accurate results and steerability. For example, by asking the engine to look for emails that _mention the date and time of a meeting_, you eliminate results that don't contain one of the two. You will get less results overall: all the results you will get enforce the existance of the two parameters.\
+   
+- **Domain-awareness** - it knows your business and data\
+  \
+  Input interpretation follows your unique business context. Names of products, teams, and internal processes are automatically interpreted by the engine. Domain-specific jargon is also automatically interpreted. For example, asking the engine if _the customer mentioned using our new AI products_ on a call will automatically identify mentions of your new AI products.\
+   
+- **Fine-grained execution** - element-level results, with full context awareness\
+  The engine returns answers at the datapoint level (a document's _element_, or a conversation's _message_). However, while processing every datapoint, the ACE engine "sees" the entire relevant context of the document or conversation, ensuring reliable and accurate reasoning.\
+  \
+  That means that sometimes, you will have to aggregate element-level results into document-level answers using SQL, because, for example, no single paragraph in the document contains the names of both legal entities involved.\
+   
+- **Business logic belongs to SQL** -\
+  \
+  Flexor ACE is optimized on extracting the most accurate **information** out of unstructured data, so you can easily build robust, transparent, and maintailable business logic on top. Integrating information, such as deciding which of the two error codes that are mentioned in a conversation should be logged, can be and should be done in simple SQL. Separate complex asks and conditions into separate inputs, and connect the dots with SQL.
