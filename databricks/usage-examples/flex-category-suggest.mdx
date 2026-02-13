@@ -10,7 +10,7 @@ If you have at least 10 `"Other"` results, run:
 
 ```sql
 %sql
-SELECT * FROM FLEX_CREATE(
+SELECT * FROM FLEX_CATEGORY_SUGGEST(
     'Did the customer report an issue? -> issue type -> [Billing, Technical]',
     'issue_category',
     'support_tickets'

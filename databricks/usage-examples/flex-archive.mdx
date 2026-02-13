@@ -10,7 +10,7 @@ This page describes how to use the `FLEX_ARCHIVE` function in Databricks to remo
 
 ```sql
 %sql
-SELECT FLEX_ARCHIVE('refund_request', 'support_tickets');
+SELECT * FROM FLEX_ARCHIVE('refund_request', 'support_tickets');
 ```
 
 This removes both columns from your output table:
