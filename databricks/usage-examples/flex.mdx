@@ -35,7 +35,7 @@ flex_query AS
 SELECT flex_query.*
 FROM subset
 JOIN flex_query
-    ON flex_query.message_id = subset.message_id
+    ON flex_query.flexor_id = subset.message_id
 WHERE answer = 'True';
 ```
 
@@ -58,7 +58,7 @@ flex_query AS
 SELECT flex_query.*
 FROM subset
 JOIN flex_query
-    ON flex_query.message_id = subset.message_id
+    ON flex_query.flexor_id = subset.message_id
 WHERE answer NOT LIKE 'NA';
 ```
 
@@ -82,7 +82,7 @@ flex_query AS
 SELECT flex_query.*
 FROM subset
 JOIN flex_query
-    ON flex_query.message_id = subset.message_id
+    ON flex_query.flexor_id = subset.message_id
 WHERE answer NOT LIKE 'NA';
 ```
 
@@ -106,7 +106,7 @@ flex_query AS
 SELECT flex_query.*
 FROM subset
 JOIN flex_query
-    ON flex_query.message_id = subset.message_id
+    ON flex_query.flexor_id = subset.message_id
 WHERE answer NOT LIKE 'NA';
 ```
 
