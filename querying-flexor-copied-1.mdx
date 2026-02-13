@@ -47,10 +47,10 @@ SELECT
 	flex_column_1.evidence AS evidence_1,
     flex_column_2.evidence AS evidence_2
 
-FROM subset
+FROM relevant_subset
 JOIN flex_column_1 ON flex_column_1.flexor_id = relevant_subset.entry_id
 JOIN flex_column_2 ON flex_column_2.flexor_id = relevant_subset.entry_id
 
 -- USER: View desired results. Typically, true / false / not like '%NA%'
-WHERE answer_1 like 'true'
+WHERE flex_column_1.answer like 'True'
 ```
